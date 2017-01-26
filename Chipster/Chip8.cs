@@ -285,7 +285,7 @@ namespace Chipster
                             index = (ushort)(sum & 0x0FFF);
                             break;
                         //FX29 - Sets I to the location of the sprite for the character in RX
-                        case 0x29;
+                        case 0x29:
                             index = memory[registers[byte1 & 0x0F] + 80];
                             break;
                         //FX33 - Stores the BCD representation of RX
