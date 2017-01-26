@@ -215,7 +215,7 @@ namespace Chipster
                 case 0xC000:
                     registers[byte1 & 0x0F] = (byte)(byte2 & (byte)(rand.Next(256)));
                     break;
-                //DXYN - Draw sprite at at location (RX, RY) with N height
+                //DXYN - Draw sprite starting in index at location (RX, RY) with N height
                 case 0xD000:
                     byte xPos = registers[byte1 & 0x0F];
 
@@ -237,10 +237,10 @@ namespace Chipster
 
                     registers[0xF] = 0;
 
-                    for (int y = 0; y < height; y++)
+                    for (int y = 0; y < height && yPos + y < 32; y++)
                     {
                         pixel = memory[index + y];
-                        for(int x = 0; x < 8; x++)
+                        for(int x = 0; x < 8 && xPos + x < 64; x++)
                         {
                             if ((pixel & (0x80 >> x)) != 0)
                             {
@@ -284,10 +284,18 @@ namespace Chipster
                                 registers[0xF] = 0;
                             index = (ushort)(sum & 0x0FFF);
                             break;
+                        //FX29 - Sets I to the location of the sprite for the character in RX
+                        case 0x29;
+                            index = memory[registers[byte1 & 0x0F] + 80];
+                            break;
                         //FX33 - Stores the BCD representation of RX
                         case 0x33:
-                            byte num = (byte)(byte1 & 0x0F);
-                            byte firstDigit = byte.Parse(num.ToString("000")[0].ToString());
+                            string numString = registers[(byte)(byte1 & 0x0F)].ToString("000");
+                            for (int i = 0; i < 3; i++)
+                            {
+                                memory[index + i] = byte.Parse(numString[i].ToString());
+                            }
+                            break;
                         //FX55 - Stores R0 to RX(inclusive) in memory starting at the address in index
                         case 0x55:
                             for(int i = 0; i < ((byte1 & 0x0F) + 1); i++)

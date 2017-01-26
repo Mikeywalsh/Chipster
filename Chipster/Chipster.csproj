@@ -52,9 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="C:\Users\micha\Documents\Unity Projects\Chip8.cs">
-      <Link>Chip8.cs</Link>
-    </Compile>
+    <Compile Include="Chip8.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
