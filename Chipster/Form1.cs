@@ -20,6 +20,7 @@ namespace Chipster
         bool showHex;
         bool romLoaded;
         bool stopped;
+        bool stepMode = false;
 
         public frmMain()
         {
@@ -45,6 +46,9 @@ namespace Chipster
                 DrawGFX();
 
             myChip.SetKeys();
+
+            if(stepMode)
+                stopped = true;
 
             if(myChip.UnknownOpcode)
                 stopped = true;
@@ -137,6 +141,7 @@ namespace Chipster
 
         private void btnStep_Click(object sender, EventArgs e)
         {
+            stepMode = true;
             stopped = false;
         }
 
