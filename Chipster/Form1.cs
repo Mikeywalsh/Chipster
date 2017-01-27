@@ -19,16 +19,17 @@ namespace Chipster
 {
     public partial class frmMain : Form
     {
-        CPU myChip = new CPU();
+        CPU myChip;
 
         TextBox[] registerDisplays = new TextBox[16];
         bool showHex;
         bool romLoaded;
         bool stopped;
-        bool stepMode = false;
+        bool stepMode;
 
         Stopwatch timer;
         int cyclesThisSecond;
+        int framesThisSecond;
 
         IntPtr screenPixelsPtr;
 
@@ -36,6 +37,7 @@ namespace Chipster
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;
+            myChip = new CPU(new Memory(4096));
             timer = new Stopwatch();
             showHex = false;
             romLoaded = false;                      
@@ -52,15 +54,7 @@ namespace Chipster
                 return;
 
             myChip.EmulateCycle();
-
             cyclesThisSecond++;
-
-            if (timer.ElapsedMilliseconds >= 1000)
-            {
-                txtFPS.Text = cyclesThisSecond.ToString();
-                cyclesThisSecond = 0;
-                timer.Restart();
-            }
 
             if (myChip.DrawFlag)
                 glDisplay.Invalidate();
@@ -85,6 +79,15 @@ namespace Chipster
             for(int i = 0; i < 16; i++)
             {
                 registerDisplays[i].Text = showHex? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
+            }
+
+            if (timer.ElapsedMilliseconds >= 1000)
+            {
+                txtFPS.Text = framesThisSecond.ToString();
+                txtIPS.Text = cyclesThisSecond.ToString();
+                cyclesThisSecond = 0;
+                framesThisSecond = 0;
+                timer.Restart();
             }
         }
 
@@ -121,46 +124,17 @@ namespace Chipster
         /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
-            //IntPtr win = SDL.SDL_CreateWindow("Jesus FUCKING CHRIST", 100, 100, 640,320, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
-            //IntPtr ren = SDL.SDL_CreateRenderer(win, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
-            //SDL.SDL_RenderDrawLine(ren, 5, 5, 55, 55);
-
-            //if(win == null || ren == null)
-            //{
-            //    SDL.SDL_Quit();
-            //}
-
             glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
-
             registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
         }
 
+        /// <summary>
+        /// Draw the current gfx array to the screen
+        /// </summary>
         void glDisplay_Paint(object sender, PaintEventArgs e)
         {
-            if (!romLoaded)
+            if (!romLoaded || !myChip.DrawFlag)
                 return;
-
-            if (!myChip.DrawFlag)
-                return;
-            //screenPixels = new byte[64 * 32 * 3];
-
-            //for (int i = 0; i < myChip.GFX.Length; i++)
-            //{
-            //    if (myChip.GFX[i])
-            //    {
-            //        //screenPixels[i] = 255;
-            //        screenPixels[(i * 3)] = 255;
-            //        screenPixels[(i * 3) + 1] = 0;
-            //        screenPixels[(i * 3) + 2] = 0;
-            //    }
-            //    else
-            //    {
-            //        //screenPixels[i] = 0;
-            //        screenPixels[(i * 3)] = 0;
-            //        screenPixels[(i * 3) + 1] = 255;
-            //        screenPixels[(i * 3) + 2] = 0;
-            //    }
-            //}
 
             screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
             Marshal.Copy(myChip.GFX, 0, screenPixelsPtr, myChip.GFX.Length);
@@ -170,8 +144,6 @@ namespace Chipster
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
-
-            GL.ClearColor(Color4.DarkSalmon);
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
@@ -192,8 +164,9 @@ namespace Chipster
             GL.TexCoord2(1, 0);
             GL.Vertex3(glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 0.0);
             GL.End();
-
             glDisplay.SwapBuffers();
+
+            framesThisSecond++;
         }
 
         /// <summary>
@@ -220,17 +193,12 @@ namespace Chipster
 
             if(result == DialogResult.OK)
             {
-                myChip.Initialize();
+                myChip.Reset();
                 myChip.LoadGame(openFileDialog.FileName);
             }
 
             timer.Start();
             romLoaded = true;
-        }
-
-        private void mnuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
         }
 
         private void glDisplay_Load(object sender, EventArgs e)

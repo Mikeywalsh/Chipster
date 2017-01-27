@@ -63,6 +63,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="HexHelper.cs" />
+    <Compile Include="IMemory.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="PictureBoxInterpolation.cs">
       <SubType>Component</SubType>

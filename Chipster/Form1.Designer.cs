@@ -85,6 +85,8 @@
             this.glDisplay = new OpenTK.GLControl();
             this.txtFPS = new System.Windows.Forms.TextBox();
             this.lblFPS = new System.Windows.Forms.Label();
+            this.txtIPS = new System.Windows.Forms.TextBox();
+            this.lblIPS = new System.Windows.Forms.Label();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
@@ -98,10 +100,9 @@
             this.aboutToolStripMenuItem});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(852, 24);
+            this.mnuMain.Size = new System.Drawing.Size(817, 24);
             this.mnuMain.TabIndex = 1;
             this.mnuMain.Text = "menuStrip1";
-            this.mnuMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuMain_ItemClicked);
             // 
             // menuToolStripMenuItem
             // 
@@ -533,9 +534,9 @@
             // 
             // btnStep
             // 
-            this.btnStep.Location = new System.Drawing.Point(574, 261);
+            this.btnStep.Location = new System.Drawing.Point(530, 261);
             this.btnStep.Name = "btnStep";
-            this.btnStep.Size = new System.Drawing.Size(136, 23);
+            this.btnStep.Size = new System.Drawing.Size(281, 23);
             this.btnStep.TabIndex = 8;
             this.btnStep.Text = "Step";
             this.btnStep.UseVisualStyleBackColor = true;
@@ -559,6 +560,7 @@
             this.txtMessage.ReadOnly = true;
             this.txtMessage.Size = new System.Drawing.Size(90, 20);
             this.txtMessage.TabIndex = 8;
+            this.txtMessage.Text = "Unknown Opcode";
             // 
             // lblMessage
             // 
@@ -571,10 +573,10 @@
             // 
             // txtSound
             // 
-            this.txtSound.Location = new System.Drawing.Point(717, 233);
+            this.txtSound.Location = new System.Drawing.Point(723, 233);
             this.txtSound.Name = "txtSound";
             this.txtSound.ReadOnly = true;
-            this.txtSound.Size = new System.Drawing.Size(50, 20);
+            this.txtSound.Size = new System.Drawing.Size(44, 20);
             this.txtSound.TabIndex = 10;
             // 
             // lblSound
@@ -598,26 +600,45 @@
             // 
             // txtFPS
             // 
-            this.txtFPS.Location = new System.Drawing.Point(487, 233);
+            this.txtFPS.Location = new System.Drawing.Point(476, 261);
             this.txtFPS.Name = "txtFPS";
             this.txtFPS.ReadOnly = true;
-            this.txtFPS.Size = new System.Drawing.Size(34, 20);
+            this.txtFPS.Size = new System.Drawing.Size(45, 20);
             this.txtFPS.TabIndex = 13;
             // 
             // lblFPS
             // 
             this.lblFPS.AutoSize = true;
-            this.lblFPS.Location = new System.Drawing.Point(454, 236);
+            this.lblFPS.Location = new System.Drawing.Point(446, 266);
             this.lblFPS.Name = "lblFPS";
             this.lblFPS.Size = new System.Drawing.Size(27, 13);
             this.lblFPS.TabIndex = 14;
             this.lblFPS.Text = "FPS";
             // 
+            // txtIPS
+            // 
+            this.txtIPS.Location = new System.Drawing.Point(476, 233);
+            this.txtIPS.Name = "txtIPS";
+            this.txtIPS.ReadOnly = true;
+            this.txtIPS.Size = new System.Drawing.Size(45, 20);
+            this.txtIPS.TabIndex = 15;
+            // 
+            // lblIPS
+            // 
+            this.lblIPS.AutoSize = true;
+            this.lblIPS.Location = new System.Drawing.Point(449, 236);
+            this.lblIPS.Name = "lblIPS";
+            this.lblIPS.Size = new System.Drawing.Size(24, 13);
+            this.lblIPS.TabIndex = 16;
+            this.lblIPS.Text = "IPS";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(852, 290);
+            this.ClientSize = new System.Drawing.Size(817, 290);
+            this.Controls.Add(this.txtIPS);
+            this.Controls.Add(this.lblIPS);
             this.Controls.Add(this.txtFPS);
             this.Controls.Add(this.lblFPS);
             this.Controls.Add(this.glDisplay);
@@ -703,6 +724,8 @@
         private OpenTK.GLControl glDisplay;
         private System.Windows.Forms.TextBox txtFPS;
         private System.Windows.Forms.Label lblFPS;
+        private System.Windows.Forms.TextBox txtIPS;
+        private System.Windows.Forms.Label lblIPS;
     }
 }
 

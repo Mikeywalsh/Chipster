@@ -10,7 +10,7 @@ namespace Chipster
     sealed class CPU
     {
         private ushort opcode;
-        private Memory memory = new Memory(4096);
+        private IMemory memory = new Memory(4096);
         private byte[] registers = new byte[16];
         private ushort index;
         private ushort pc;
@@ -26,9 +26,19 @@ namespace Chipster
         Random rand = new Random();
 
         /// <summary>
-        /// Initialize the chip8 system.
+        /// Initialise the chip8 system
         /// </summary>
-        public void Initialize()
+        /// <param name="mem">The starting memory</param>
+        public CPU(IMemory mem)
+        {
+            memory = mem;
+            Reset();
+        }
+
+        /// <summary>
+        /// Reset the chip8 back to its base values
+        /// </summary>
+        public void Reset()
         {
             pc = 512;
             opcode = 0;
@@ -45,13 +55,10 @@ namespace Chipster
             registers = new byte[16];
 
             //Clear memory
-            memory = new byte[4096];
+            memory.Clear();
 
             //Set fontset
-            for(int i = 0; i < FontSet.Length; i++)
-            {
-                memory[i] = FontSet[i];
-            }
+            memory.Write(FontSet, 0);
 
             //Reset timers
             delay_timer = 0;
@@ -65,10 +72,7 @@ namespace Chipster
         public void LoadGame(string filePath)
         {
             byte[] fileContents = File.ReadAllBytes(filePath);
-            for(int i = 0; i < fileContents.Length; i++)
-            {
-                memory[i + 512] = fileContents[i];
-            }
+            memory.Write(fileContents, 512);
         }
 
         /// <summary>
@@ -79,8 +83,8 @@ namespace Chipster
             drawFlag = false;
 
             //Fetch Opcode
-            byte byte1 = memory[pc];
-            byte byte2 = memory[pc + 1];
+            byte byte1 = memory.Read(pc);
+            byte byte2 = memory.Read(pc + 1);
             opcode = (ushort)(byte1 << 8 | byte2);
 
             switch (opcode & 0xF000)
@@ -260,7 +264,7 @@ namespace Chipster
 
                     for (int y = 0; y < height && yPos + y < 32; y++)
                     {
-                        pixel = memory[index + y];
+                        pixel = memory.Read(index + y);
                         for(int x = 0; x < 8 && xPos + x < 64; x++)
                         {
                             if ((pixel & (0x80 >> x)) != 0)
@@ -336,7 +340,7 @@ namespace Chipster
                             break;
                         //FX29 - Sets I to the location of the sprite for the character in RX
                         case 0x29:
-                            index = memory[registers[byte1 & 0x0F] + 80];
+                            index = memory.Read(registers[byte1 & 0x0F] + 80);
                             pc += 2;
                             break;
                         //FX33 - Stores the BCD representation of RX
@@ -344,7 +348,7 @@ namespace Chipster
                             string numString = registers[(byte)(byte1 & 0x0F)].ToString("000");
                             for (int i = 0; i < 3; i++)
                             {
-                                memory[index + i] = byte.Parse(numString[i].ToString());
+                                memory.Write(byte.Parse(numString[i].ToString()), index + i);
                             }
                             pc += 2;
                             break;
@@ -352,7 +356,7 @@ namespace Chipster
                         case 0x55:
                             for(int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
-                                memory[index + i] = registers[i];
+                                memory.Write(registers[i], index + i);
                             }
                             pc += 2;
                             break;
@@ -360,7 +364,7 @@ namespace Chipster
                         case 0x65:
                             for (int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
-                               registers[i] = memory[index + i];
+                               registers[i] = memory.Read(index + i);
                             }
                             pc += 2;
                             break;
