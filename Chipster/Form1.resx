@@ -120,17 +120,6 @@
   <metadata name="mnuMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="picDisplay.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAABp0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuMTFH80I3AAAA40lEQVRYR+2U
-        6wnDMAyEu0qX6QadInNlncxUg0AcUiw/IqO0FXwcx1n+ccjJ47UfX00WiCYLRPNnBZ7vjSCPivm0n2C4
-        gPCcCCNOCT3MXkz2c6kAIY4wR985M8qqDSD2TPH6Sj9LvoGiBOZ4hDnqBGMFbkgWiCYLRPPrBfT/7jRv
-        egQTnNGexwzaBYRijt6eQey7Wm3iN4BKiNymawM93k6Q2mRNbcYKENqjYs4ewVx4VDJNGgXuTxYAaO/4
-        BtgLdcS5QE0JThxZuAFDHfEvwP5U3Vn4hAidF3XEs0AIWSCW/fgAam4NdNU1ulUAAAAASUVORK5CYII=
-</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>42</value>
   </metadata>

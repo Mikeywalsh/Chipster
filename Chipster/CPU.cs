@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chipster
 {
-    sealed class Chip8
+    sealed class CPU
     {
         private ushort opcode;
         private byte[] memory = new byte[4096];
@@ -373,7 +373,6 @@ namespace Chipster
                 default:
                     unknownOpcode = true;
                     break;
-
             }
 
             if (delay_timer > 0)

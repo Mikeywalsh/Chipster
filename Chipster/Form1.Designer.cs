@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,13 +83,11 @@
             this.txtSound = new System.Windows.Forms.TextBox();
             this.lblSound = new System.Windows.Forms.Label();
             this.glDisplay = new OpenTK.GLControl();
-            this.picDisplay = new Chipster.PictureBoxInterpolation();
             this.txtFPS = new System.Windows.Forms.TextBox();
             this.lblFPS = new System.Windows.Forms.Label();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -592,23 +589,12 @@
             // glDisplay
             // 
             this.glDisplay.BackColor = System.Drawing.Color.Black;
-            this.glDisplay.Location = new System.Drawing.Point(0, 296);
+            this.glDisplay.Location = new System.Drawing.Point(0, 27);
             this.glDisplay.Name = "glDisplay";
             this.glDisplay.Size = new System.Drawing.Size(443, 263);
             this.glDisplay.TabIndex = 12;
             this.glDisplay.VSync = false;
             this.glDisplay.Load += new System.EventHandler(this.glDisplay_Load);
-            // 
-            // picDisplay
-            // 
-            this.picDisplay.Image = ((System.Drawing.Image)(resources.GetObject("picDisplay.Image")));
-            this.picDisplay.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.picDisplay.Location = new System.Drawing.Point(0, 27);
-            this.picDisplay.Name = "picDisplay";
-            this.picDisplay.Size = new System.Drawing.Size(443, 263);
-            this.picDisplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picDisplay.TabIndex = 0;
-            this.picDisplay.TabStop = false;
             // 
             // txtFPS
             // 
@@ -631,7 +617,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(852, 571);
+            this.ClientSize = new System.Drawing.Size(852, 290);
             this.Controls.Add(this.txtFPS);
             this.Controls.Add(this.lblFPS);
             this.Controls.Add(this.glDisplay);
@@ -643,7 +629,6 @@
             this.Controls.Add(this.btnStep);
             this.Controls.Add(this.grpSpecialPurpose);
             this.Controls.Add(this.grpGeneralPurpose);
-            this.Controls.Add(this.picDisplay);
             this.Controls.Add(this.mnuMain);
             this.MainMenuStrip = this.mnuMain;
             this.Name = "frmMain";
@@ -655,15 +640,12 @@
             this.grpGeneralPurpose.PerformLayout();
             this.grpSpecialPurpose.ResumeLayout(false);
             this.grpSpecialPurpose.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private PictureBoxInterpolation picDisplay;
         private System.Windows.Forms.MenuStrip mnuMain;
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadROMToolStripMenuItem;

@@ -19,8 +19,8 @@ namespace Chipster
 {
     public partial class frmMain : Form
     {
-        Chip8 myChip = new Chip8();
-        Bitmap screen = new Bitmap(64, 32, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        CPU myChip = new CPU();
+
         TextBox[] registerDisplays = new TextBox[16];
         bool showHex;
         bool romLoaded;
@@ -31,7 +31,6 @@ namespace Chipster
         int cyclesThisSecond;
 
         IntPtr screenPixelsPtr;
-        byte[] screenPixels;
 
         public frmMain()
         {
@@ -70,25 +69,6 @@ namespace Chipster
 
             if(stepMode || myChip.UnknownOpcode)
                 stopped = true;
-        }
-
-        /// <summary>
-        /// Update the screen display each frame
-        /// </summary>
-        public void DrawGFX()
-        {
-            for (int y = 0; y < screen.Height; y++)
-            {
-                for (int x = 0; x < screen.Width; x++)
-                {
-                    screen.SetPixel(x, y, myChip.GFX[x + (y * 64)] == 255? Color.FromArgb(33,85,107) : Color.FromArgb(70,165,206));
-                    picDisplay.Image = screen;
-                }
-            }
-
-            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
-            glDisplay.Invalidate();
-
         }
 
         /// <summary>
