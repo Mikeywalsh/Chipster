@@ -87,6 +87,7 @@
             this.lblFPS = new System.Windows.Forms.Label();
             this.txtIPS = new System.Windows.Forms.TextBox();
             this.lblIPS = new System.Windows.Forms.Label();
+            this.btnPlay = new System.Windows.Forms.Button();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
@@ -536,7 +537,7 @@
             // 
             this.btnStep.Location = new System.Drawing.Point(530, 261);
             this.btnStep.Name = "btnStep";
-            this.btnStep.Size = new System.Drawing.Size(281, 23);
+            this.btnStep.Size = new System.Drawing.Size(143, 23);
             this.btnStep.TabIndex = 8;
             this.btnStep.Text = "Step";
             this.btnStep.UseVisualStyleBackColor = true;
@@ -632,11 +633,22 @@
             this.lblIPS.TabIndex = 16;
             this.lblIPS.Text = "IPS";
             // 
+            // btnPlay
+            // 
+            this.btnPlay.Location = new System.Drawing.Point(682, 261);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(123, 23);
+            this.btnPlay.TabIndex = 17;
+            this.btnPlay.Text = "Play";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 290);
+            this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.txtIPS);
             this.Controls.Add(this.lblIPS);
             this.Controls.Add(this.txtFPS);
@@ -726,6 +738,7 @@
         private System.Windows.Forms.Label lblFPS;
         private System.Windows.Forms.TextBox txtIPS;
         private System.Windows.Forms.Label lblIPS;
+        private System.Windows.Forms.Button btnPlay;
     }
 }
 

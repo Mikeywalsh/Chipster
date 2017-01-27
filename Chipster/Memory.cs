@@ -9,7 +9,7 @@ namespace Chipster
     /// <summary>
     /// A class used to write to and read from memory for the chip8 emulated system
     /// </summary>
-    sealed class Memory : IMemory
+    sealed public class Memory : IMemory
     {
         public int Size { get; private set; }
 
