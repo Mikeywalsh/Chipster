@@ -194,7 +194,7 @@ namespace Chipster
             if(result == DialogResult.OK)
             {
                 myChip.Reset();
-                myChip.LoadGame(openFileDialog.FileName);
+                myChip.LoadROM(openFileDialog.FileName);
             }
 
             timer.Start();

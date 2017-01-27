@@ -69,7 +69,7 @@ namespace Chipster
         /// Load ROM from a file on the users PC into memory
         /// </summary>
         /// <param name="filePath">Path that the ROM is located at</param>
-        public void LoadGame(string filePath)
+        public void LoadROM(string filePath)
         {
             byte[] fileContents = File.ReadAllBytes(filePath);
             memory.Write(fileContents, 512);
