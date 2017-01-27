@@ -14,12 +14,11 @@ namespace Chipster
         private byte[] registers = new byte[16];
         private ushort index;
         private ushort pc;
-        private bool[] gfx = new bool[64 * 32];
+        private byte[] gfx = new byte[64 * 32];
         private byte delay_timer;
         private byte sound_timer;
         private bool beep;
         private Stack<ushort> stack;
-        private sbyte sp;
         private bool[] key = new bool[16];
         private bool drawFlag = true;
 
@@ -34,15 +33,13 @@ namespace Chipster
             pc = 512;
             opcode = 0;
             index = 0;
-            sp = 0;
             SetKeys();
 
             //Clear Display
-            gfx = new bool[64 * 32];
+            gfx = new byte[64 * 32];
 
             //Clear Stack
             stack = new Stack<ushort>(16);
-            sp = -1;
 
             //Clear registers
             registers = new byte[16];
@@ -94,7 +91,7 @@ namespace Chipster
                     {
                         //00E0 - Clear the screen
                         case 0xE0:
-                            gfx = new bool[64 * 32];
+                            gfx = new byte[64 * 32];
                             pc += 2;
                             break;
                         //OOEE - Returns from a subroutine
@@ -268,9 +265,13 @@ namespace Chipster
                         {
                             if ((pixel & (0x80 >> x)) != 0)
                             {
-                                if (gfx[xPos + x + ((yPos + y) * 64)])
+                                if (gfx[xPos + x + ((yPos + y) * 64)] == 255)
+                                {
                                     registers[0xF] = 1;
-                                gfx[xPos + x + ((yPos + y) * 64)] = !gfx[xPos + x + ((yPos + y) * 64)];
+                                    gfx[xPos + x + ((yPos + y) * 64)] = 0;
+                                    continue;
+                                }
+                                gfx[xPos + x + ((yPos + y) * 64)] = 255;
                             }
                         }
                     }
@@ -421,7 +422,7 @@ namespace Chipster
             get { return opcode; }
         }
 
-        public bool[] GFX
+        public byte[] GFX
         {
             get { return gfx; }
         }

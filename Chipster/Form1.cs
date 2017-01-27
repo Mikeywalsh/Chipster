@@ -12,6 +12,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System.Diagnostics;
 //using SDL2;
 
 namespace Chipster
@@ -26,7 +27,8 @@ namespace Chipster
         bool stopped;
         bool stepMode = false;
 
-        System.Windows.Forms.Timer t;
+        Stopwatch timer;
+        int cyclesThisSecond;
 
         IntPtr screenPixelsPtr;
         byte[] screenPixels;
@@ -35,11 +37,9 @@ namespace Chipster
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;
+            timer = new Stopwatch();
             showHex = false;
-            romLoaded = false;
-
-            t = new System.Windows.Forms.Timer();
-            t.Start();            
+            romLoaded = false;                      
         }
 
         /// <summary>
@@ -54,15 +54,21 @@ namespace Chipster
 
             myChip.EmulateCycle();
 
+            cyclesThisSecond++;
+
+            if (timer.ElapsedMilliseconds >= 1000)
+            {
+                txtFPS.Text = cyclesThisSecond.ToString();
+                cyclesThisSecond = 0;
+                timer.Restart();
+            }
+
             if (myChip.DrawFlag)
                 glDisplay.Invalidate();
 
             myChip.SetKeys();
 
-            if(stepMode)
-                stopped = true;
-
-            if(myChip.UnknownOpcode)
+            if(stepMode || myChip.UnknownOpcode)
                 stopped = true;
         }
 
@@ -75,7 +81,7 @@ namespace Chipster
             {
                 for (int x = 0; x < screen.Width; x++)
                 {
-                    screen.SetPixel(x, y, myChip.GFX[x + (y * 64)]? Color.FromArgb(33,85,107) : Color.FromArgb(70,165,206));
+                    screen.SetPixel(x, y, myChip.GFX[x + (y * 64)] == 255? Color.FromArgb(33,85,107) : Color.FromArgb(70,165,206));
                     picDisplay.Image = screen;
                 }
             }
@@ -154,30 +160,32 @@ namespace Chipster
             if (!romLoaded)
                 return;
 
-            screenPixels = new byte[64 * 32 * 3];
+            if (!myChip.DrawFlag)
+                return;
+            //screenPixels = new byte[64 * 32 * 3];
 
-            for (int i = 0; i < myChip.GFX.Length; i++)
-            {
-                if (myChip.GFX[i])
-                {
-                    screenPixels[(i * 3)] = 255;
-                    screenPixels[(i * 3) + 1] = 0;
-                    screenPixels[(i * 3) + 2] = 0;
-                }
-                else
-                {
-                    screenPixels[(i * 3)] = 0;
-                    screenPixels[(i * 3) + 1] = 255;
-                    screenPixels[(i * 3) + 2] = 0;
-                }
-            }
+            //for (int i = 0; i < myChip.GFX.Length; i++)
+            //{
+            //    if (myChip.GFX[i])
+            //    {
+            //        //screenPixels[i] = 255;
+            //        screenPixels[(i * 3)] = 255;
+            //        screenPixels[(i * 3) + 1] = 0;
+            //        screenPixels[(i * 3) + 2] = 0;
+            //    }
+            //    else
+            //    {
+            //        //screenPixels[i] = 0;
+            //        screenPixels[(i * 3)] = 0;
+            //        screenPixels[(i * 3) + 1] = 255;
+            //        screenPixels[(i * 3) + 2] = 0;
+            //    }
+            //}
 
-            screenPixelsPtr = Marshal.AllocHGlobal(screenPixels.Length);
-            Marshal.Copy(screenPixels, 0, screenPixelsPtr, screenPixels.Length);
+            screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
+            Marshal.Copy(myChip.GFX, 0, screenPixelsPtr, myChip.GFX.Length);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            txtSound.Text = t.Interval.ToString();
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -192,7 +200,7 @@ namespace Chipster
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, 64, 32, 0, PixelFormat.Rgb, PixelType.UnsignedByte, screenPixelsPtr);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, 64, 32, 0, PixelFormat.Luminance, PixelType.UnsignedByte, screenPixelsPtr);
 
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0.0, 0.0);
@@ -236,6 +244,7 @@ namespace Chipster
                 myChip.LoadGame(openFileDialog.FileName);
             }
 
+            timer.Start();
             romLoaded = true;
         }
 

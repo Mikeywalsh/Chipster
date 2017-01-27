@@ -85,6 +85,8 @@
             this.lblSound = new System.Windows.Forms.Label();
             this.glDisplay = new OpenTK.GLControl();
             this.picDisplay = new Chipster.PictureBoxInterpolation();
+            this.txtFPS = new System.Windows.Forms.TextBox();
+            this.lblFPS = new System.Windows.Forms.Label();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
@@ -545,7 +547,7 @@
             // chkHex
             // 
             this.chkHex.AutoSize = true;
-            this.chkHex.Location = new System.Drawing.Point(766, 237);
+            this.chkHex.Location = new System.Drawing.Point(773, 235);
             this.chkHex.Name = "chkHex";
             this.chkHex.Size = new System.Drawing.Size(45, 17);
             this.chkHex.TabIndex = 9;
@@ -555,16 +557,16 @@
             // 
             // txtMessage
             // 
-            this.txtMessage.Location = new System.Drawing.Point(516, 235);
+            this.txtMessage.Location = new System.Drawing.Point(583, 233);
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(98, 20);
+            this.txtMessage.Size = new System.Drawing.Size(90, 20);
             this.txtMessage.TabIndex = 8;
             // 
             // lblMessage
             // 
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(460, 238);
+            this.lblMessage.Location = new System.Drawing.Point(527, 236);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(50, 13);
             this.lblMessage.TabIndex = 9;
@@ -572,16 +574,16 @@
             // 
             // txtSound
             // 
-            this.txtSound.Location = new System.Drawing.Point(675, 235);
+            this.txtSound.Location = new System.Drawing.Point(717, 233);
             this.txtSound.Name = "txtSound";
             this.txtSound.ReadOnly = true;
-            this.txtSound.Size = new System.Drawing.Size(85, 20);
+            this.txtSound.Size = new System.Drawing.Size(50, 20);
             this.txtSound.TabIndex = 10;
             // 
             // lblSound
             // 
             this.lblSound.AutoSize = true;
-            this.lblSound.Location = new System.Drawing.Point(631, 238);
+            this.lblSound.Location = new System.Drawing.Point(679, 236);
             this.lblSound.Name = "lblSound";
             this.lblSound.Size = new System.Drawing.Size(38, 13);
             this.lblSound.TabIndex = 11;
@@ -608,11 +610,30 @@
             this.picDisplay.TabIndex = 0;
             this.picDisplay.TabStop = false;
             // 
+            // txtFPS
+            // 
+            this.txtFPS.Location = new System.Drawing.Point(487, 233);
+            this.txtFPS.Name = "txtFPS";
+            this.txtFPS.ReadOnly = true;
+            this.txtFPS.Size = new System.Drawing.Size(34, 20);
+            this.txtFPS.TabIndex = 13;
+            // 
+            // lblFPS
+            // 
+            this.lblFPS.AutoSize = true;
+            this.lblFPS.Location = new System.Drawing.Point(454, 236);
+            this.lblFPS.Name = "lblFPS";
+            this.lblFPS.Size = new System.Drawing.Size(27, 13);
+            this.lblFPS.TabIndex = 14;
+            this.lblFPS.Text = "FPS";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 571);
+            this.Controls.Add(this.txtFPS);
+            this.Controls.Add(this.lblFPS);
             this.Controls.Add(this.glDisplay);
             this.Controls.Add(this.txtSound);
             this.Controls.Add(this.lblSound);
@@ -698,6 +719,8 @@
         private System.Windows.Forms.TextBox txtSound;
         private System.Windows.Forms.Label lblSound;
         private OpenTK.GLControl glDisplay;
+        private System.Windows.Forms.TextBox txtFPS;
+        private System.Windows.Forms.Label lblFPS;
     }
 }
 
