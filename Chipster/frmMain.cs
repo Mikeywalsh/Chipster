@@ -209,10 +209,13 @@ namespace Chipster
             GL.Enable(EnableCap.Texture2D);
         }
 
-        private void btnPlay_Click(object sender, EventArgs e)
+        private void btnUnstep_Click(object sender, EventArgs e)
         {
-            stepMode = false;
-            stopped = false;
+            if (stepMode)
+            {
+                stepMode = false;
+                stopped = false;
+            }
         }
     }
 }
