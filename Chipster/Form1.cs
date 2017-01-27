@@ -8,6 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 //using SDL2;
 
 namespace Chipster
@@ -22,12 +26,20 @@ namespace Chipster
         bool stopped;
         bool stepMode = false;
 
+        System.Windows.Forms.Timer t;
+
+        IntPtr screenPixelsPtr;
+        byte[] screenPixels;
+
         public frmMain()
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;
             showHex = false;
-            romLoaded = false;            
+            romLoaded = false;
+
+            t = new System.Windows.Forms.Timer();
+            t.Start();            
         }
 
         /// <summary>
@@ -43,7 +55,7 @@ namespace Chipster
             myChip.EmulateCycle();
 
             if (myChip.DrawFlag)
-                DrawGFX();
+                glDisplay.Invalidate();
 
             myChip.SetKeys();
 
@@ -67,6 +79,10 @@ namespace Chipster
                     picDisplay.Image = screen;
                 }
             }
+
+            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+            glDisplay.Invalidate();
+
         }
 
         /// <summary>
@@ -128,7 +144,68 @@ namespace Chipster
             //    SDL.SDL_Quit();
             //}
 
+            glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
+
             registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
+        }
+
+        void glDisplay_Paint(object sender, PaintEventArgs e)
+        {
+            if (!romLoaded)
+                return;
+
+            screenPixels = new byte[64 * 32 * 3];
+
+            for (int i = 0; i < myChip.GFX.Length; i++)
+            {
+                if (myChip.GFX[i])
+                {
+                    screenPixels[(i * 3)] = 255;
+                    screenPixels[(i * 3) + 1] = 0;
+                    screenPixels[(i * 3) + 2] = 0;
+                }
+                else
+                {
+                    screenPixels[(i * 3)] = 0;
+                    screenPixels[(i * 3) + 1] = 255;
+                    screenPixels[(i * 3) + 2] = 0;
+                }
+            }
+
+            screenPixelsPtr = Marshal.AllocHGlobal(screenPixels.Length);
+            Marshal.Copy(screenPixels, 0, screenPixelsPtr, screenPixels.Length);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            txtSound.Text = t.Interval.ToString();
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
+
+            GL.ClearColor(Color4.DarkSalmon);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, 64, 32, 0, PixelFormat.Rgb, PixelType.UnsignedByte, screenPixelsPtr);
+
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0.0, 0.0);
+            GL.Vertex3(00, glDisplay.ClientSize.Height, 0.0);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(00, 00, 0.0);
+            GL.TexCoord2(1.0, 1.0);
+            GL.Vertex3(glDisplay.ClientSize.Width, 00, 0.0);
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 0.0);
+            GL.End();
+
+            glDisplay.SwapBuffers();
         }
 
         /// <summary>
@@ -165,6 +242,14 @@ namespace Chipster
         private void mnuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void glDisplay_Load(object sender, EventArgs e)
+        {
+            base.OnLoad(e);
+            GL.Viewport(0, 0, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Texture2D);
         }
     }
 }

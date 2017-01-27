@@ -83,6 +83,7 @@
             this.lblMessage = new System.Windows.Forms.Label();
             this.txtSound = new System.Windows.Forms.TextBox();
             this.lblSound = new System.Windows.Forms.Label();
+            this.glDisplay = new OpenTK.GLControl();
             this.picDisplay = new Chipster.PictureBoxInterpolation();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
@@ -586,6 +587,16 @@
             this.lblSound.TabIndex = 11;
             this.lblSound.Text = "Sound";
             // 
+            // glDisplay
+            // 
+            this.glDisplay.BackColor = System.Drawing.Color.Black;
+            this.glDisplay.Location = new System.Drawing.Point(0, 296);
+            this.glDisplay.Name = "glDisplay";
+            this.glDisplay.Size = new System.Drawing.Size(443, 263);
+            this.glDisplay.TabIndex = 12;
+            this.glDisplay.VSync = false;
+            this.glDisplay.Load += new System.EventHandler(this.glDisplay_Load);
+            // 
             // picDisplay
             // 
             this.picDisplay.Image = ((System.Drawing.Image)(resources.GetObject("picDisplay.Image")));
@@ -601,7 +612,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(852, 286);
+            this.ClientSize = new System.Drawing.Size(852, 571);
+            this.Controls.Add(this.glDisplay);
             this.Controls.Add(this.txtSound);
             this.Controls.Add(this.lblSound);
             this.Controls.Add(this.txtMessage);
@@ -685,6 +697,7 @@
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.TextBox txtSound;
         private System.Windows.Forms.Label lblSound;
+        private OpenTK.GLControl glDisplay;
     }
 }
 
