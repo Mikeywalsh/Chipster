@@ -556,12 +556,11 @@
             // 
             // txtMessage
             // 
-            this.txtMessage.Location = new System.Drawing.Point(583, 233);
+            this.txtMessage.Location = new System.Drawing.Point(579, 233);
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(90, 20);
+            this.txtMessage.Size = new System.Drawing.Size(94, 20);
             this.txtMessage.TabIndex = 8;
-            this.txtMessage.Text = "Unknown Opcode";
             // 
             // lblMessage
             // 
