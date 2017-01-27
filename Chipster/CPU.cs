@@ -10,7 +10,7 @@ namespace Chipster
     sealed class CPU
     {
         private ushort opcode;
-        private byte[] memory = new byte[4096];
+        private Memory memory = new Memory(4096);
         private byte[] registers = new byte[16];
         private ushort index;
         private ushort pc;
