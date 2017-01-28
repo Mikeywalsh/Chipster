@@ -1,8 +1,8 @@
-language:csharp
-solution:Chipster.sln
+language: csharp
+solution: Chipster.sln
 install:
-	-nuget restore Chipster.sln
-	-nuget install NUnit.Console -Version 3.6.0 -OutputDirectory testrunner
+	- nuget restore Chipster.sln
+	- nuget install NUnit.Console -Version 3.6.0 -OutputDirectory testrunner
 script:
-	-xbuild /p:Configuration=Debug Chipster.sln
-	-mono ./testrunner/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./ChipsterTest/bin/Debug/ChipsterTest.dll
+	- xbuild /p:Configuration=Debug Chipster.sln
+	- mono ./testrunner/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./ChipsterTest/bin/Debug/ChipsterTest.dll
