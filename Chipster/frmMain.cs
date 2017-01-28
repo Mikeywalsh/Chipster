@@ -13,7 +13,6 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Diagnostics;
-//using SDL2;
 
 namespace Chipster
 {
