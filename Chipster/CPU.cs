@@ -285,7 +285,7 @@ namespace Chipster
                 case 0xE000:
                     switch(byte2)
                     {
-                        //Ex9E - Skip next instruction if key at x is pressed
+                        //EX9E - Skip next instruction if key at x is pressed
                         case 0x9E:
                             if (key[(byte1 & 0x0F)])
                             {
@@ -293,7 +293,7 @@ namespace Chipster
                             }
                             pc += 2;
                             break;
-                        //ExA1 - Skip next instruction if key at x is NOT pressed
+                        //EXA1 - Skip next instruction if key at x is NOT pressed
                         case 0xA1:
                             if (!key[(byte1 & 0x0F)])
                             {
