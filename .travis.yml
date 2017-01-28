@@ -1,5 +1,5 @@
-language: csharp
-solution: Chipster.sln
+language:csharp
+solution:Chipster.sln
 install:
   - nuget restore Chipster.sln
   - nuget install NUnit.Console -Version 3.6.0 -OutputDirectory testrunner
