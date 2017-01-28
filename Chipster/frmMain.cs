@@ -37,6 +37,7 @@ namespace Chipster
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;
             myChip = new CPU(new Memory(4096));
+            screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
             timer = new Stopwatch();
             showHex = false;
             romLoaded = false;                      
@@ -135,7 +136,6 @@ namespace Chipster
             if (!romLoaded || !myChip.DrawFlag)
                 return;
 
-            screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
             Marshal.Copy(myChip.GFX, 0, screenPixelsPtr, myChip.GFX.Length);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

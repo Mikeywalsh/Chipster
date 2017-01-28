@@ -10,16 +10,16 @@ namespace Chipster
     sealed class CPU
     {
         private ushort opcode;
-        private IMemory memory = new Memory(4096);
-        private byte[] registers = new byte[16];
+        private IMemory memory;
+        private byte[] registers;
         private ushort index;
         private ushort pc;
-        private byte[] gfx = new byte[64 * 32];
+        private byte[] gfx;
         private byte delay_timer;
         private byte sound_timer;
         private bool beep;
         private Stack<ushort> stack;
-        private bool[] key = new bool[16];
+        private bool[] key;
         private bool drawFlag = true;
 
         private bool unknownOpcode;
@@ -32,6 +32,8 @@ namespace Chipster
         public CPU(IMemory mem)
         {
             memory = mem;
+            gfx = new byte[64 * 32];
+            key = new bool[16];
             Reset();
         }
 
@@ -46,7 +48,10 @@ namespace Chipster
             SetKeys();
 
             //Clear Display
-            gfx = new byte[64 * 32];
+            for (int i = 0; i < gfx.Length; i++)
+            { 
+                gfx[i] = 0;
+            }
 
             //Clear Stack
             stack = new Stack<ushort>(16);
@@ -95,7 +100,10 @@ namespace Chipster
                     {
                         //00E0 - Clear the screen
                         case 0xE0:
-                            gfx = new byte[64 * 32];
+                            for (int i = 0; i < gfx.Length; i++)
+                            {
+                                gfx[i] = 0;
+                            }
                             pc += 2;
                             break;
                         //OOEE - Returns from a subroutine
