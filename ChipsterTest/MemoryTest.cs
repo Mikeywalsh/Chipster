@@ -50,12 +50,5 @@ namespace ChipsterTest
 
             Assert.AreEqual(0, m.Read(67));
         }
-
-        [Test]
-        public void FailTest()
-        {
-            Assert.False(true);
-
-        }
     }
 }
