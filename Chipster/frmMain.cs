@@ -140,10 +140,6 @@ namespace Chipster
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
-
             GL.BindTexture(TextureTarget.Texture2D, 0);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
@@ -206,6 +202,10 @@ namespace Chipster
             GL.Viewport(0, 0, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
         }
 
         private void btnUnstep_Click(object sender, EventArgs e)
