@@ -152,6 +152,7 @@ namespace Chipster
             GL.Vertex3(glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 0.0);
             GL.End();
             glDisplay.SwapBuffers();
+            GL.DrawArrays(PrimitiveType.Quads, 0, 4);
 
             framesThisSecond++;
         }
@@ -191,23 +192,35 @@ namespace Chipster
         private void glDisplay_Load(object sender, EventArgs e)
         {
             base.OnLoad(e);
+
+            //Initialise the viewport and enable required flags
             GL.Viewport(0, 0, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
 
+            //Set the model matrix
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
 
+            //Get an ID to store the screen texture and swap to it
             int texHandle = GL.GenTexture();
             Console.WriteLine(texHandle.ToString());
             GL.BindTexture(TextureTarget.Texture2D, texHandle);
+
+            //Set the texture settings for the current texture(Screen Texture)
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
+
+            //Get an ID to store the screen coordinates and swap to it
+            int vertexHandle = GL.GenBuffer();
+            Console.WriteLine(texHandle.ToString());
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexHandle);
+            GL.BufferData(BufferTarget.ArrayBuffer, 4,)
         }
 
         private void btnUnstep_Click(object sender, EventArgs e)
