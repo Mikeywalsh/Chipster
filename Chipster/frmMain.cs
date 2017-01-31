@@ -199,13 +199,15 @@ namespace Chipster
             GL.LoadIdentity();
             GL.Ortho(0, glDisplay.ClientSize.Width, 0, glDisplay.ClientSize.Height, -1, 1);
 
+            int texHandle = GL.GenTexture();
+            Console.WriteLine(texHandle.ToString());
+            GL.BindTexture(TextureTarget.Texture2D, texHandle);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Decal);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         private void btnUnstep_Click(object sender, EventArgs e)
