@@ -39,7 +39,7 @@ namespace Chipster
             Application.Idle += HandleApplicationIdle;
             myChip = new CPU(new Memory(4096));
             screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
-            myDisplay = new Display(myChip, screenPixelsPtr, ClientSize.Width, ClientSize.Height);
+            myDisplay = new Display(myChip, screenPixelsPtr, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
             timer = new Stopwatch();
             showHex = false;
             romLoaded = false;                      

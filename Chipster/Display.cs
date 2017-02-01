@@ -12,22 +12,26 @@ namespace Chipster
     class Display
     {
         public IntPtr ScreenTexPtr { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int ScreenWidth { get; private set; }
+        public int ScreenHeight { get; private set; }
+        public int PixelWidth { get; private set; }
+        public int PixelHeight { get; private set; }
         private CPU Chip;
 
-        public Display(CPU c, IntPtr s, int w, int h)
+        public Display(CPU cpu, IntPtr screenTexPtr, int screenWidth, int screenHeight, int pixelWidth, int pixelHeight)
         {
-            Chip = c;
-            ScreenTexPtr = s;
-            Width = w;
-            Height = h;
+            Chip = cpu;
+            ScreenTexPtr = screenTexPtr;
+            ScreenWidth = screenWidth;
+            ScreenHeight = screenHeight;
+            PixelWidth = pixelWidth;
+            PixelHeight = pixelHeight;
         }
 
         public void Init()
         {
             //Initialise the viewport and enable required flags
-            GL.Viewport(0, 0, Width, Height);
+            GL.Viewport(0, 0, ScreenWidth, ScreenHeight);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
             GL.ClearColor(Color4.MediumPurple);
@@ -35,7 +39,7 @@ namespace Chipster
             //Set the model matrix
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Ortho(0, Width, 0, Height, -1, 1);
+            GL.Ortho(0, ScreenWidth, 0, ScreenHeight, -1, 1);
 
             //Get an ID to store the screen texture and swap to it
             int texHandle = GL.GenTexture();
@@ -57,17 +61,17 @@ namespace Chipster
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Marshal.Copy(Chip.GFX, 0, ScreenTexPtr, Chip.GFX.Length);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, 64, 32, 0, PixelFormat.Luminance, PixelType.UnsignedByte, ScreenTexPtr);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, PixelWidth, PixelHeight, 0, PixelFormat.Luminance, PixelType.UnsignedByte, ScreenTexPtr);
 
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(00, Height, 0.0);
+            GL.Vertex3(00, ScreenHeight, 0.0);
             GL.TexCoord2(0, 1);
             GL.Vertex3(00, 00, 0.0);
             GL.TexCoord2(1.0, 1.0);
-            GL.Vertex3(100, 00, 0.0);
+            GL.Vertex3(ScreenWidth, 00, 0.0);
             GL.TexCoord2(1, 0);
-            GL.Vertex3(100, Height, 0.0);
+            GL.Vertex3(ScreenWidth, ScreenHeight, 0.0);
             GL.End();
         }
     }
