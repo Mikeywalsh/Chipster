@@ -9,21 +9,21 @@ namespace Chipster
 {
     sealed class CPU
     {
-        private ushort opcode;
         private IMemory memory;
-        private byte[] registers;
-        private ushort index;
-        private ushort pc;
-        private byte[] gfx;
-        private byte delay_timer;
-        private byte sound_timer;
-        private bool beep;
+        public byte[] Registers { get; private set; }
+        public ushort Index { get; private set; }
+        public ushort PC { get; private set; }
+        public ushort Opcode { get; private set; }
+        public byte[] GFX { get; private set; }
+        public byte DelayTimer { get; private set; }
+        public byte SoundTimer { get; private set; }
+        public bool Beep { get; private set; }
+        public bool UnknownOpcode { get; private set; }
         private Stack<ushort> stack;
         private bool[] key;
-        private bool drawFlag = true;
+        public bool DrawFlag { get;  private set;}
 
-        private bool unknownOpcode;
-        Random rand = new Random();
+        private Random rand = new Random();
 
         /// <summary>
         /// Initialise the chip8 system
@@ -32,7 +32,7 @@ namespace Chipster
         public CPU(IMemory mem)
         {
             memory = mem;
-            gfx = new byte[64 * 32];
+            GFX = new byte[64 * 32];
             key = new bool[16];
             Reset();
         }
@@ -42,22 +42,22 @@ namespace Chipster
         /// </summary>
         public void Reset()
         {
-            pc = 512;
-            opcode = 0;
-            index = 0;
+            PC = 512;
+            Opcode = 0;
+            Index = 0;
             SetKeys();
 
             //Clear Display
-            for (int i = 0; i < gfx.Length; i++)
+            for (int i = 0; i < GFX.Length; i++)
             { 
-                gfx[i] = 0;
+                GFX[i] = 0;
             }
 
             //Clear Stack
             stack = new Stack<ushort>(16);
 
             //Clear registers
-            registers = new byte[16];
+            Registers = new byte[16];
 
             //Clear memory
             memory.Clear();
@@ -66,8 +66,8 @@ namespace Chipster
             memory.Write(FontSet, 0);
 
             //Reset timers
-            delay_timer = 0;
-            sound_timer = 0;
+            DelayTimer = 0;
+            SoundTimer = 0;
         }
 
         /// <summary>
@@ -85,192 +85,192 @@ namespace Chipster
         /// </summary>
         public void EmulateCycle()
         {
-            drawFlag = false;
+            DrawFlag = false;
 
             //Fetch Opcode
-            byte byte1 = memory.Read(pc);
-            byte byte2 = memory.Read(pc + 1);
-            opcode = (ushort)(byte1 << 8 | byte2);
+            byte byte1 = memory.Read(PC);
+            byte byte2 = memory.Read(PC + 1);
+            Opcode = (ushort)(byte1 << 8 | byte2);
 
-            switch (opcode & 0xF000)
+            switch (Opcode & 0xF000)
             {
-                //Two different opcodes beginning with 0
+                //Two different Opcodes beginning with 0
                 case 0x0000:
                     switch (byte2)
                     {
                         //00E0 - Clear the screen
                         case 0xE0:
-                            for (int i = 0; i < gfx.Length; i++)
+                            for (int i = 0; i < GFX.Length; i++)
                             {
-                                gfx[i] = 0;
+                                GFX[i] = 0;
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                         //OOEE - Returns from a subroutine
                         case 0xEE:
-                            pc = stack.Pop();
-                            pc += 2;
+                            PC = stack.Pop();
+                            PC += 2;
                             break;
                         default:
-                            unknownOpcode = true;
+                            UnknownOpcode = true;
                             break;
                     }
                     break;
                 //1NNN - Jump to address NNN
                 case 0x1000:
-                    pc = (ushort)(opcode & 0x0FFF);
+                    PC = (ushort)(Opcode & 0x0FFF);
                     break;
                 ////2NNN - Calls subroutine at NNN
                 case 0x2000:
-                    stack.Push(pc);
-                    pc = (ushort)(opcode & 0x0FFF);
+                    stack.Push(PC);
+                    PC = (ushort)(Opcode & 0x0FFF);
                     break;
                 //3XNN - Skip the next instruction if RX equals NN
                 case 0x3000:
-                    if (registers[byte1 & 0x0F] == byte2)
+                    if (Registers[byte1 & 0x0F] == byte2)
                     {
-                        pc += 2;
+                        PC += 2;
                     }
-                    pc += 2;
+                    PC += 2;
                     break;
                 //4XNN - Skip the next instruction if RX doesn't equal NN
                 case 0x4000:
-                    if (registers[byte1 & 0x0F] != byte2)
+                    if (Registers[byte1 & 0x0F] != byte2)
                     {
-                        pc += 2;
+                        PC += 2;
                     }
-                    pc += 2;
+                    PC += 2;
                     break;
                 //5XY0 - Skips the next instruction if RX equals RY
                 case 0x5000:
-                    if (registers[byte1 & 0x0F] == registers[byte2 >> 4])
+                    if (Registers[byte1 & 0x0F] == Registers[byte2 >> 4])
                     {
-                        pc += 2;
+                        PC += 2;
                     }
-                    pc += 2;
+                    PC += 2;
                     break;
                 //6XNN - Sets register X to the value of NN
                 case 0x6000:
-                    registers[byte1 & 0x0F] = byte2;
-                    pc += 2;
+                    Registers[byte1 & 0x0F] = byte2;
+                    PC += 2;
                     break;
                 //7XNN - Adds NN to the value stored at RX
                 case 0x7000:
-                    registers[byte1 & 0x0F] += byte2;
-                    pc += 2;
+                    Registers[byte1 & 0x0F] += byte2;
+                    PC += 2;
                     break;
-                //Series of opcodes beginning with 8 that perform various register arithmatic
+                //Series of Opcodes beginning with 8 that perform various register arithmatic
                 case 0x8000:
                     switch(byte2 & 0x0F)
                     {
                         //8XY0 - Set RX to the value of RY
                         case 0x00:
-                            registers[byte1 & 0x0F] = registers[byte2 >> 4];
-                            pc += 2;
+                            Registers[byte1 & 0x0F] = Registers[byte2 >> 4];
+                            PC += 2;
                             break;
                         //8XY1 - Sets RX to RX or RY
                         case 0x01:
-                            registers[byte1 & 0x0F] |= registers[byte2 >> 4];
-                            pc += 2;
+                            Registers[byte1 & 0x0F] |= Registers[byte2 >> 4];
+                            PC += 2;
                             break;
                         //8XY2 - Sets RX to RX and RY
                         case 0x02:
-                            registers[byte1 & 0x0F] &= registers[byte2 >> 4];
-                            pc += 2;
+                            Registers[byte1 & 0x0F] &= Registers[byte2 >> 4];
+                            PC += 2;
                             break;
                         //8XY3 - Sets RX to RX xor RY
                         case 0x03:
-                            registers[byte1 & 0x0F] ^= registers[byte2 >> 4];
-                            pc += 2;
+                            Registers[byte1 & 0x0F] ^= Registers[byte2 >> 4];
+                            PC += 2;
                             break;
                         //8XY4 - Adds RY to RX, RF is set to 1 if carry, 0 if not.
                         case 0x04:
-                            ushort sum = (ushort)(registers[byte2 >> 4] + registers[byte1 & 0x0F]);
+                            ushort sum = (ushort)(Registers[byte2 >> 4] + Registers[byte1 & 0x0F]);
                             if (sum > 255)
                             {
-                                registers[0xF] = 1;
+                                Registers[0xF] = 1;
                                 sum -= 256;
                             }
                             else
-                                registers[0xF] = 0;
-                            registers[byte1 & 0x0F] = (byte)(sum);
-                            pc += 2;
+                                Registers[0xF] = 0;
+                            Registers[byte1 & 0x0F] = (byte)(sum);
+                            PC += 2;
                             break;
                         //8XY5 - RX = RX - RY, RF is set to NOT borrow - MAY NOT WORK
                         case 0x05:
-                            registers[0xF] = (registers[byte1 & 0x0F] > registers[(byte2 & 0xF0) >> 4] ? (byte)1 : (byte)0);
-                            if (registers[byte1 & 0x0F] - registers[(byte2 & 0xF0) >> 4] < 0)
+                            Registers[0xF] = (Registers[byte1 & 0x0F] > Registers[(byte2 & 0xF0) >> 4] ? (byte)1 : (byte)0);
+                            if (Registers[byte1 & 0x0F] - Registers[(byte2 & 0xF0) >> 4] < 0)
                             {
-                                registers[byte1 & 0x0F] = (byte)((registers[byte1 & 0x0F] - registers[(byte2 & 0xF0) >> 4]) + 256);
+                                Registers[byte1 & 0x0F] = (byte)((Registers[byte1 & 0x0F] - Registers[(byte2 & 0xF0) >> 4]) + 256);
                             }
                             else
                             {
-                                registers[byte1 & 0x0F] = (byte)(registers[byte1 & 0x0F] - registers[(byte2 & 0xF0) >> 4]);
+                                Registers[byte1 & 0x0F] = (byte)(Registers[byte1 & 0x0F] - Registers[(byte2 & 0xF0) >> 4]);
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                         //8XY6 - Shift vx right by 1
                         case 0x06:
-                            registers[0xF] = (byte)((registers[byte1 & 0x0F] & 0x1));
-                            registers[byte1 & 0x0f] >>= 1;
-                            pc += 2;
+                            Registers[0xF] = (byte)((Registers[byte1 & 0x0F] & 0x1));
+                            Registers[byte1 & 0x0f] >>= 1;
+                            PC += 2;
                             break;
                         //8XY7 - RX = RY - RX, RF is set to NOT borrow - MAY NOT WORK
                         case 0x07:
-                            registers[0xF] = (registers[(byte2 & 0xF0) >> 4] > registers[byte1 & 0x0F] ? (byte)1 : (byte)0);
-                            if (registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F] < 0)
+                            Registers[0xF] = (Registers[(byte2 & 0xF0) >> 4] > Registers[byte1 & 0x0F] ? (byte)1 : (byte)0);
+                            if (Registers[(byte2 & 0xF0) >> 4] - Registers[byte1 & 0x0F] < 0)
                             {
-                                registers[byte1 & 0x0F] = (byte)((registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F]) + 256);
+                                Registers[byte1 & 0x0F] = (byte)((Registers[(byte2 & 0xF0) >> 4] - Registers[byte1 & 0x0F]) + 256);
                             }
                             else
                             {
-                                registers[byte1 & 0x0F] = (byte)(registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F]);
+                                Registers[byte1 & 0x0F] = (byte)(Registers[(byte2 & 0xF0) >> 4] - Registers[byte1 & 0x0F]);
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                         //8XYE - Shift vx left by 1
                         case 0x0E:
-                            registers[0xF] = (byte)((registers[byte1 & 0x0F] & 0x1));
-                            ushort temp = registers[byte1 & 0x0f] >>= 1;
+                            Registers[0xF] = (byte)((Registers[byte1 & 0x0F] & 0x1));
+                            ushort temp = Registers[byte1 & 0x0f] >>= 1;
                             if (temp > 255)
                                 temp -= 256;
 
-                            registers[byte1 & 0x0F] = (byte)temp;
-                            pc += 2;
+                            Registers[byte1 & 0x0F] = (byte)temp;
+                            PC += 2;
                             break;
                         default:
-                            unknownOpcode = true;
+                            UnknownOpcode = true;
                             break;
                     }
                     break;
                 //9XY0 - Skips the next instruction if RX doesn't equal RY
                 case 0x9000:
-                    if (registers[byte1 & 0x0F] != registers[byte2 >> 4])
+                    if (Registers[byte1 & 0x0F] != Registers[byte2 >> 4])
                     {
-                        pc += 2;
+                        PC += 2;
                     }
-                    pc += 2;
+                    PC += 2;
                     break;
-                //ANNN - Set the index register to the value of NNN
+                //ANNN - Set the Index register to the value of NNN
                 case 0xA000:
-                    index = (ushort)(opcode & 0x0FFF);
-                    pc += 2;
+                    Index = (ushort)(Opcode & 0x0FFF);
+                    PC += 2;
                     break;
                 //CXNN - Set RX to the result of an and operation on a random number and NN
                 case 0xC000:
-                    registers[byte1 & 0x0F] = (byte)(byte2 & (byte)(rand.Next(256)));
-                    pc += 2;
+                    Registers[byte1 & 0x0F] = (byte)(byte2 & (byte)(rand.Next(256)));
+                    PC += 2;
                     break;
-                //DXYN - Draw sprite starting in index at location (RX, RY) with N height
+                //DXYN - Draw sprite starting in Index at location (RX, RY) with N height
                 case 0xD000:
-                    byte xPos = registers[byte1 & 0x0F];
+                    byte xPos = Registers[byte1 & 0x0F];
 
                     if (xPos < 0)
                         xPos += 64;
                     else if (xPos >= 64)
                         xPos -= 64;
 
-                    byte yPos = registers[byte2 >> 4];
+                    byte yPos = Registers[byte2 >> 4];
 
                     if (yPos < 0)
                         yPos += 32;
@@ -279,28 +279,28 @@ namespace Chipster
 
                     byte height = (byte)(byte2 & 0x0F);
                     byte pixel;
-                    drawFlag = true;
+                    DrawFlag = true;
 
-                    registers[0xF] = 0;
+                    Registers[0xF] = 0;
 
                     for (int y = 0; y < height && yPos + y < 32; y++)
                     {
-                        pixel = memory.Read(index + y);
+                        pixel = memory.Read(Index + y);
                         for(int x = 0; x < 8 && xPos + x < 64; x++)
                         {
                             if ((pixel & (0x80 >> x)) != 0)
                             {
-                                if (gfx[xPos + x + ((yPos + y) * 64)] == 255)
+                                if (GFX[xPos + x + ((yPos + y) * 64)] == 255)
                                 {
-                                    registers[0xF] = 1;
-                                    gfx[xPos + x + ((yPos + y) * 64)] = 0;
+                                    Registers[0xF] = 1;
+                                    GFX[xPos + x + ((yPos + y) * 64)] = 0;
                                     continue;
                                 }
-                                gfx[xPos + x + ((yPos + y) * 64)] = 255;
+                                GFX[xPos + x + ((yPos + y) * 64)] = 255;
                             }
                         }
                     }
-                    pc += 2;
+                    PC += 2;
                     break;
                 //Opcodes to do with key presses
                 case 0xE000:
@@ -310,107 +310,107 @@ namespace Chipster
                         case 0x9E:
                             if (key[(byte1 & 0x0F)])
                             {
-                                pc += 2;
+                                PC += 2;
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                         //EXA1 - Skip next instruction if key at x is NOT pressed
                         case 0xA1:
                             if (!key[(byte1 & 0x0F)])
                             {
-                                pc += 2;
+                                PC += 2;
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                     }
                     break;
-                ///Series of opcodes beginning with F that perform various functions
+                ///Series of Opcodes beginning with F that perform various functions
                 case 0xF000:
                     switch(byte2)
                     {
                         //FX07 - Set RX to the value of the delay timer
                         case 0x07:
-                            registers[byte1 & 0x0F] = delay_timer;
-                            pc += 2;
+                            Registers[byte1 & 0x0F] = DelayTimer;
+                            PC += 2;
                             break;
                         //FX0A - Await key press then store result in RX
                         case 0x0A:
                             //Temp, just set RX to first key value immediately
-                            registers[byte1 & 0x0F] = 0;
-                            pc += 2;
+                            Registers[byte1 & 0x0F] = 0;
+                            PC += 2;
                             break;
                         //FX15 - Set the value of the delay timer to be equal to RX
                         case 0x15:
-                            delay_timer = registers[byte1 & 0x0F];
-                            pc += 2;
+                            DelayTimer = Registers[byte1 & 0x0F];
+                            PC += 2;
                             break;
                         //FX15 - Set the value of the sound timer to be equal to RX
                         case 0x18:
-                            sound_timer = registers[byte1 & 0x0F];
-                            pc += 2;
+                            SoundTimer = Registers[byte1 & 0x0F];
+                            PC += 2;
                             break;
                         //FX1E - Adds VX to I and sets RF to 1 if range overflow, 0 if not
                         case 0x1E:
-                            ushort sum = (ushort)(index + registers[byte1 & 0x0F]);
+                            ushort sum = (ushort)(Index + Registers[byte1 & 0x0F]);
                             if (sum > 4095)
-                                registers[0xF] = 1;
+                                Registers[0xF] = 1;
                             else
-                                registers[0xF] = 0;
-                            index = (ushort)(sum & 0x0FFF);
-                            pc += 2;
+                                Registers[0xF] = 0;
+                            Index = (ushort)(sum & 0x0FFF);
+                            PC += 2;
                             break;
                         //FX29 - Sets I to the location of the sprite for the character in RX
                         case 0x29:
-                            index = memory.Read(registers[byte1 & 0x0F] + 80);
-                            pc += 2;
+                            Index = memory.Read(Registers[byte1 & 0x0F] + 80);
+                            PC += 2;
                             break;
                         //FX33 - Stores the BCD representation of RX
                         case 0x33:
-                            string numString = registers[(byte)(byte1 & 0x0F)].ToString("000");
+                            string numString = Registers[(byte)(byte1 & 0x0F)].ToString("000");
                             for (int i = 0; i < 3; i++)
                             {
-                                memory.Write(byte.Parse(numString[i].ToString()), index + i);
+                                memory.Write(byte.Parse(numString[i].ToString()), Index + i);
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
-                        //FX55 - Stores R0 to RX(inclusive) in memory starting at the address in index
+                        //FX55 - Stores R0 to RX(inclusive) in memory starting at the address in Index
                         case 0x55:
                             for(int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
-                                memory.Write(registers[i], index + i);
+                                memory.Write(Registers[i], Index + i);
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
-                        //FX65 - Fills R0 to RX(inclusive) from memory values starting at the address in index
+                        //FX65 - Fills R0 to RX(inclusive) from memory values starting at the address in Index
                         case 0x65:
                             for (int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
-                               registers[i] = memory.Read(index + i);
+                               Registers[i] = memory.Read(Index + i);
                             }
-                            pc += 2;
+                            PC += 2;
                             break;
                         default:
-                            unknownOpcode = true;
+                            UnknownOpcode = true;
                             break;
                     }
                     break;
-                //If ROM data doesnt match any known opcodes, then inform the user
+                //If ROM data doesnt match any known Opcodes, then inform the user
                 default:
-                    unknownOpcode = true;
+                    UnknownOpcode = true;
                     break;
             }
 
-            if (delay_timer > 0)
-                delay_timer--;
+            if (DelayTimer > 0)
+                DelayTimer--;
 
-            if(sound_timer > 0)
+            if(SoundTimer > 0)
             {
-                sound_timer--;
-                beep = true;
+                SoundTimer--;
+                Beep = true;
             }
             else
             {
-                beep = false;
+                Beep = false;
             }
         }
 
@@ -425,43 +425,8 @@ namespace Chipster
             }
         }
 
-        //Accessors
-        public byte[] Registers
-        {
-            get { return registers; }
-        }
-
-        public ushort PC
-        {
-            get { return pc; }
-        }
-
-        public ushort Index
-        {
-            get { return index; }
-        }
-
-        public ushort Opcode
-        {
-            get { return opcode; }
-        }
-
-        public byte[] GFX
-        {
-            get { return gfx; }
-        }
-
-        public bool DrawFlag
-        {
-            get { return drawFlag; }
-        }
-
-        public bool Beep
-        {
-            get { return beep; }
-        }
-
-        public byte[] FontSet
+        //The base fontset, representing hex values from 0-F, which all CPU instances contain
+        public static byte[] FontSet
         {
             get
             {
@@ -485,11 +450,6 @@ namespace Chipster
                     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
                 };
             }
-        }
-
-        public bool UnknownOpcode
-        {
-            get { return unknownOpcode; }
         }
     }
 }
