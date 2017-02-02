@@ -23,14 +23,15 @@ namespace Chipster
             int currentLine = 512;
 
             //A buffer used to store the current instruction, which is always 2 bytes long
-            byte[] currentInstructionBuffer = new byte[2];
+            byte[] currentInstruction = new byte[2];
 
-            //A string representation of the current instruction
-            string currentInstruction;
+            //A string representing the current instruction
+            string instructionText;
 
-            while (reader.Read(currentInstructionBuffer, currentLine - 512, 2) != 0)
+            while (reader.Read(currentInstruction, currentLine - 512, 2) != 0)
             {
-                
+                instructionText = HexHelper.ByteToHex(currentInstruction);
+                writer.WriteLine("L" + currentLine.ToString("0000") + ":" + instructionText);
             }
         }
     }
