@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 
 namespace Chipster
 {
+    /// <summary>
+    /// A class used to display the GFX array of a CPU class in OpenTK
+    /// </summary>
     class Display
     {
         public IntPtr ScreenTexPtr { get; private set; }
@@ -58,11 +61,16 @@ namespace Chipster
 
         public void Draw()
         {
+            //Clear the screen at the start of each frame
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            //Copy the current chip GFX array into the assigned space for it in unmanaged memory
             Marshal.Copy(Chip.GFX, 0, ScreenTexPtr, Chip.GFX.Length);
+
+            //Set the current texture to be equal to the GFX byte array
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, PixelWidth, PixelHeight, 0, PixelFormat.Luminance, PixelType.UnsignedByte, ScreenTexPtr);
 
+            //Draw the 'screen' quad and apply the texture to it
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0.0, 0.0);
             GL.Vertex3(00, ScreenHeight, 0.0);

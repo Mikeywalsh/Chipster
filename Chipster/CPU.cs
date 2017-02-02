@@ -215,6 +215,19 @@ namespace Chipster
                             registers[byte1 & 0x0f] >>= 1;
                             pc += 2;
                             break;
+                        //8XY7 - RX = RY - RX, RF is set to NOT borrow - MAY NOT WORK
+                        case 0x07:
+                            registers[0xF] = (registers[(byte2 & 0xF0) >> 4] > registers[byte1 & 0x0F] ? (byte)1 : (byte)0);
+                            if (registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F] < 0)
+                            {
+                                registers[byte1 & 0x0F] = (byte)((registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F]) + 256);
+                            }
+                            else
+                            {
+                                registers[byte1 & 0x0F] = (byte)(registers[(byte2 & 0xF0) >> 4] - registers[byte1 & 0x0F]);
+                            }
+                            pc += 2;
+                            break;
                         //8XYE - Shift vx left by 1
                         case 0x0E:
                             registers[0xF] = (byte)((registers[byte1 & 0x0F] & 0x1));

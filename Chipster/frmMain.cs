@@ -135,9 +135,11 @@ namespace Chipster
         /// </summary>
         void glDisplay_Paint(object sender, PaintEventArgs e)
         {
+            //Don't bother drawing anything to the screen if a ROM hasn't been loaded or that draw flag in the CPU is not set
             if (!romLoaded || !myChip.DrawFlag)
                 return;
 
+            //Use
             myDisplay.Draw();
             glDisplay.SwapBuffers();
 
@@ -160,27 +162,32 @@ namespace Chipster
 
         private void loadROMToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Initialise a dialogue which allows the user to select a .ch8 ROM file to load into the CPU
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Chip-8 ROM (.ch8)|*.ch8";
             openFileDialog.FilterIndex = 1;
 
+            //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
             DialogResult result = openFileDialog.ShowDialog();
 
+            //If the user selected a .ch8, reset the CPU to its default values and load the ROM into memory
             if(result == DialogResult.OK)
             {
                 myChip.Reset();
                 myChip.LoadROM(openFileDialog.FileName);
             }
 
-            timer.Start();
+            //Start the timer that determines FPS and IPS and set the romLoaded flag to true
+            timer.Start();     
             romLoaded = true;
         }
 
         private void glDisplay_Load(object sender, EventArgs e)
         {
             base.OnLoad(e);
-            myDisplay.Init();
 
+            //Initialise the display
+            myDisplay.Init();
         }
 
         private void btnUnstep_Click(object sender, EventArgs e)
