@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chipster
 {
-    class HexHelper
+    static class HexHelper
     {
         public static string ByteToHex(byte b)
         {
