@@ -126,6 +126,7 @@ namespace Chipster
         /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
+            Compiler.Decompile("Zero Demo.ch8", "Zero Demo Code.txt");
             glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
             registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
         }
