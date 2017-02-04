@@ -209,7 +209,7 @@ namespace Chipster
                             }
                             PC += 2;
                             break;
-                        //8XY6 - Shift vx right by 1
+                        //8XY6 - Shift RX right by 1
                         case 0x06:
                             Registers[0xF] = (byte)((Registers[byte1 & 0x0F] & 0x1));
                             Registers[byte1 & 0x0f] >>= 1;
@@ -228,7 +228,7 @@ namespace Chipster
                             }
                             PC += 2;
                             break;
-                        //8XYE - Shift vx left by 1
+                        //8XYE - Shift RX left by 1
                         case 0x0E:
                             Registers[0xF] = (byte)((Registers[byte1 & 0x0F] & 0x1));
                             ushort temp = Registers[byte1 & 0x0f] >>= 1;
