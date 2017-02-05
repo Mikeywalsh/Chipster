@@ -221,7 +221,7 @@ namespace Chipster
                     currentLine++;
                 }
 
-                MessageBox.Show("Decompiled " + romPath + "\nStored results in " + codePath);
+                MessageBox.Show("Decompiled " + romPath + "\nStored results in " + codePath, "Successful Decompilation");
             }
         }
     }

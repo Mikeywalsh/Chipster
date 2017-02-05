@@ -350,10 +350,11 @@ namespace Chipster
             //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
             DialogResult result = openFileDialog.ShowDialog();
 
-            //If the user selected a .ch8, attempt to decompile it
+            //If the user selected a .ch8 file, attempt to decompile it
             if (result == DialogResult.OK)
             {
-                Compiler.Decompile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + ".txt");
+                Console.WriteLine(openFileDialog.FileName);
+                Compiler.Decompile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + " code.txt");
             }
         }
         #endregion
