@@ -365,7 +365,7 @@ namespace Chipster
                             break;
                         //FX29 - Sets I to the location of the sprite for the character in RX
                         case 0x29:
-                            Index = memory.Read(Registers[byte1 & 0x0F] + 80);
+                            Index = (ushort)(Registers[byte1 & 0x0F] * 5);
                             PC += 2;
                             break;
                         //FX33 - Stores the BCD representation of RX
