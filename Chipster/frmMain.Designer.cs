@@ -229,13 +229,13 @@
             // soundToolStripMenuItem
             // 
             this.soundToolStripMenuItem.Name = "soundToolStripMenuItem";
-            this.soundToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.soundToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.soundToolStripMenuItem.Text = "Sound";
             // 
             // colorsToolStripMenuItem
             // 
             this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
-            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.colorsToolStripMenuItem.Text = "Colors";
             // 
             // speedToolStripMenuItem
@@ -256,7 +256,7 @@
             this.toolStripSeparator2,
             this.khzUnlimitedToolStripMenuItem});
             this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            this.speedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.speedToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.speedToolStripMenuItem.Text = "Speed";
             // 
             // khz1ToolStripMenuItem
@@ -895,6 +895,7 @@
             this.Controls.Add(this.grpSpecialPurpose);
             this.Controls.Add(this.grpGeneralPurpose);
             this.Controls.Add(this.mnuMain);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.mnuMain;
             this.Name = "frmMain";
             this.Text = "Chipster";
