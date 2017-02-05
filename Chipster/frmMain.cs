@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
@@ -21,34 +20,34 @@ namespace Chipster
 {
     public partial class frmMain : Form
     {
+        //CPU and Display instances
         CPU myChip;
         Display myDisplay;
 
+        //Debugger variables
         TextBox[] registerDisplays = new TextBox[16];
+        bool initialised;
         bool showDebugger;
         bool showHex;
         bool romLoaded;
         bool stopped;
         bool stepMode;
 
-        Stopwatch timer;
-        int cyclesThisSecond;
-        int framesThisSecond;
+        //Other GUI variables
+        ToolStripMenuItem lastSpeedChecked;
+        ToolStripMenuItem lastMultiplierChecked;
 
-        IntPtr screenPixelsPtr;
+        //Variable for determining IPS and FPS, and controlling clock speed
+        Stopwatch clockTimer;
+        float clockSpeed;
+        long lastInstructionTick = 0;
+        int instructionsThisSecond;
+        int framesThisSecond;
 
         public frmMain()
         {
             InitializeComponent();
-            Application.Idle += HandleApplicationIdle;
-            myChip = new CPU(new Memory(4096));
-            screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
-            myDisplay = new Display(myChip, screenPixelsPtr, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
-            timer = new Stopwatch();
-            showDebugger = true;
-            showHex = false;
-            romLoaded = false;
-            Compiler.Decompile("Zero Demo.ch8", "Zero Demo Code.txt");
+            Application.Idle += HandleApplicationIdle;     
 
             //Stream stream = File.Open("test.chst8", FileMode.Create);
             //BinaryFormatter b = new BinaryFormatter();
@@ -71,22 +70,29 @@ namespace Chipster
         /// <summary>
         /// Main loop for chip8 instance
         /// </summary>
-        public void mainLoop()
+        private void mainLoop()
         {
-            if(showDebugger)
+            //Update the debug info, if it is enabled, still allow the user to swap between hex and decimal view even if stopped
+            if (showDebugger)
                 UpdateInfo();
 
+            //If the stopped flag is set, halt further execution
             if (stopped)
                 return;
 
+            //Run a CPU cycle and update timer values
             myChip.EmulateCycle();
-            cyclesThisSecond++;
+            instructionsThisSecond++;
+            lastInstructionTick = clockTimer.ElapsedTicks;
 
+            //If the draw flag in the CPU is enabled, then output the GFX array to screen
             if (myChip.DrawFlag)
                 glDisplay.Invalidate();
 
+            //Set the currently pressed keys in the CPU instance
             myChip.SetKeys();
 
+            //Halt execution if the user has paused exectuion or an unknown opcode has been reached
             if(stepMode || myChip.UnknownOpcode)
                 stopped = true;
         }
@@ -96,36 +102,30 @@ namespace Chipster
         /// </summary>
         public void UpdateInfo()
         {
-            txtProgramCounter.Text = showHex? HexHelper.UshortToHex(myChip.PC): myChip.PC.ToString();
-            txtInstruction.Text = showHex? HexHelper.UshortToHex(myChip.Opcode): myChip.Opcode.ToString();
-            txtAdress.Text = showHex? HexHelper.UshortToHex(myChip.Index): myChip.Index.ToString();
-            txtMessage.Text = myChip.UnknownOpcode ? "Unknown Opcode" : "None";
-            txtSound.Text = myChip.Beep ? "BEEP!" : "-";
+            //txtProgramCounter.Text = showHex? HexHelper.UshortToHex(myChip.PC): myChip.PC.ToString();
+            //txtInstruction.Text = showHex? HexHelper.UshortToHex(myChip.Opcode): myChip.Opcode.ToString();
+            //txtAdress.Text = showHex? HexHelper.UshortToHex(myChip.Index): myChip.Index.ToString();
+            //txtMessage.Text = myChip.UnknownOpcode ? "Unknown Opcode" : "None";
+            //txtSound.Text = myChip.Beep ? "BEEP!" : "-";
 
-            for(int i = 0; i < 16; i++)
-            {
-                registerDisplays[i].Text = showHex? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
-            }
+            //for(int i = 0; i < 16; i++)
+            //{
+            //    registerDisplays[i].Text = showHex? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
+            //}
 
-            if (timer.ElapsedMilliseconds >= 1000)
+            if (clockTimer.ElapsedMilliseconds >= 1000)
             {
                 txtFPS.Text = framesThisSecond.ToString();
-                txtIPS.Text = cyclesThisSecond.ToString();
-                cyclesThisSecond = 0;
+                txtIPS.Text = instructionsThisSecond.ToString();
+                instructionsThisSecond = 0;
                 framesThisSecond = 0;
-                timer.Restart();
+                clockTimer.Restart();
             }
         }
+                
+        #region True application Idle Logic
 
-        private void HandleApplicationIdle(object sender, EventArgs e)
-        {
-            while(IsApplicationIdle() && romLoaded)
-            {
-                mainLoop();
-            }
-        }
-
-        bool IsApplicationIdle()
+        private bool IsApplicationIdle()
         {
             NativeMessage result;
             return PeekMessage(out result, IntPtr.Zero, 0, 0, 0) == 0;
@@ -144,18 +144,50 @@ namespace Chipster
 
         [DllImport("user32.dll")]
         public static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
+        #endregion
 
         /// <summary>
-        /// Populate the register displays array with the register text boxes displayed on the form
+        /// Called every time the application is idle.
         /// </summary>
-        private void frmMain_Load(object sender, EventArgs e)
+        private void HandleApplicationIdle(object sender, EventArgs e)
         {
-            glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
-            registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
+            while (IsApplicationIdle() && romLoaded)
+            {
+                //Run the main loop at the desired clock speed
+                if (clockSpeed == -1 || Stopwatch.Frequency / clockSpeed < clockTimer.ElapsedTicks - lastInstructionTick)
+                    mainLoop();
+            }
         }
 
         /// <summary>
-        /// Draw the current gfx array to the screen
+        /// Populate the register displays array with the register text boxes displayed on the form, and set up initial variable values
+        /// </summary>
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            //This method was being called twice for some reason, a temporary fix has been applied, will have to find cause later
+            if (initialised)
+                return;
+
+            //Assign initial data to form elements
+            glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
+            registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
+
+            //Set initial clockspeed to default
+            lastSpeedChecked = khz5ToolStripMenuItem;
+            clockSpeed = 500;
+            clockTimer = new Stopwatch();
+
+            //Initialise CPU and Display variables
+            myChip = new CPU(new Memory(4096));
+            myDisplay = new Display(myChip, Marshal.AllocHGlobal(myChip.GFX.Length), glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
+            showDebugger = true;
+            showHex = false;
+            romLoaded = false;
+            initialised = true;
+        }
+
+        /// <summary>
+        /// Draw the current GFX array to the screen
         /// </summary>
         void glDisplay_Paint(object sender, PaintEventArgs e)
         {
@@ -201,8 +233,8 @@ namespace Chipster
                 myChip.LoadROM(openFileDialog.FileName);
             }
 
-            //Start the timer that determines FPS and IPS and set the romLoaded flag to true
-            timer.Start();     
+            //Start the clockTimer that determines FPS and IPS and set the romLoaded flag to true
+            clockTimer.Start();     
             romLoaded = true;
         }
 
@@ -223,6 +255,10 @@ namespace Chipster
             }
         }
 
+        #region Debug Display toggle
+        /// <summary>
+        /// Allow the user to enable or disable the debugging feature
+        /// </summary>
         private void debuggerToggleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             debuggerToggleToolStripMenuItem.Checked = !debuggerToggleToolStripMenuItem.Checked;
@@ -237,5 +273,89 @@ namespace Chipster
                 this.Size = new Size(458, 329);
             }
         }
+        #endregion
+
+        #region Clock Speed Setters
+        private void SetClockSpeed(object sender, EventArgs e)
+        {
+            ToolStripMenuItem t = (ToolStripMenuItem)sender;
+            clockSpeed = float.Parse(t.Tag.ToString());
+            if (lastMultiplierChecked != null)
+                clockSpeed *= int.Parse(lastMultiplierChecked.Tag.ToString());
+            x10ToolStripMenuItem.Enabled = true;
+            x100ToolStripMenuItem.Enabled = true;
+            lastSpeedChecked.Checked = false;
+            t.Checked = true;
+            lastSpeedChecked = t;
+        }
+
+        private void MulClockSpeed(object sender, EventArgs e)
+        {
+            ToolStripMenuItem t = (ToolStripMenuItem)sender;
+            int mul = int.Parse(t.Tag.ToString());
+
+            if (t.Checked)
+            {
+                clockSpeed /= mul;
+            }
+            else
+            {
+                if (lastMultiplierChecked != null)
+                    clockSpeed /= int.Parse(lastMultiplierChecked.Tag.ToString());
+                clockSpeed *= mul;
+            }
+
+            t.Checked = !t.Checked;
+            lastMultiplierChecked = t;
+        }
+
+        private void UnlimitedClockSpeed(object sender, EventArgs e)
+        {
+            ToolStripMenuItem t = (ToolStripMenuItem)sender;
+
+            if(t.Checked)
+            {
+                clockSpeed = 500;
+                lastSpeedChecked = khz5ToolStripMenuItem;
+                khz5ToolStripMenuItem.Checked = true;
+                x10ToolStripMenuItem.Enabled = true;
+                x100ToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                clockSpeed = -1;
+                lastSpeedChecked.Checked = false;
+                x10ToolStripMenuItem.Enabled = false;
+                x100ToolStripMenuItem.Enabled = false;
+                if (lastMultiplierChecked != null)
+                {
+                    lastMultiplierChecked.Checked = false;
+                    lastMultiplierChecked = null;
+                }
+                lastSpeedChecked = t;
+            }
+            t.Checked = !t.Checked;
+        }
+
+        #endregion
+
+        #region Compile/Decompile Logic
+        private void decompileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Initialise a dialogue which allows the user to select a .ch8 ROM file to decompile
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Chip-8 ROM (.ch8)|*.ch8";
+            openFileDialog.FilterIndex = 1;
+
+            //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
+            DialogResult result = openFileDialog.ShowDialog();
+
+            //If the user selected a .ch8, attempt to decompile it
+            if (result == DialogResult.OK)
+            {
+                Compiler.Decompile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + ".txt");
+            }
+        }
+        #endregion
     }
 }
