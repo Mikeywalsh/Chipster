@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace Chipster
 {
     /// <summary>
-    /// A class used to display the GFX array of a CPU class in OpenTK
+    /// A class used to display the GFX array of a CPU instance in OpenTK
     /// </summary>
     class Display
     {

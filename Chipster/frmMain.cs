@@ -140,7 +140,7 @@ namespace Chipster
             if (!romLoaded || !myChip.DrawFlag)
                 return;
 
-            //Use
+            //Draw the current state of the GFX array to the screen
             myDisplay.Draw();
             glDisplay.SwapBuffers();
 

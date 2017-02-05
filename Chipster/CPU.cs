@@ -322,6 +322,9 @@ namespace Chipster
                             }
                             PC += 2;
                             break;
+                        default:
+                            UnknownOpcode = true;
+                            break;
                     }
                     break;
                 ///Series of Opcodes beginning with F that perform various functions
@@ -349,7 +352,7 @@ namespace Chipster
                             SoundTimer = Registers[byte1 & 0x0F];
                             PC += 2;
                             break;
-                        //FX1E - Adds VX to I and sets RF to 1 if range overflow, 0 if not
+                        //FX1E - Adds RX to I and sets RF to 1 if range overflow, 0 if not
                         case 0x1E:
                             ushort sum = (ushort)(Index + Registers[byte1 & 0x0F]);
                             if (sum > 4095)

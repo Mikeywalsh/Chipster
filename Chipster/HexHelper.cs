@@ -25,7 +25,7 @@ namespace Chipster
             return ByteToHex(new byte[] { (byte)(u >> 8), (byte)(u & 0x00FF)});
         }
         
-        public static byte[] StringToByteArray(String hex)
+        public static byte[] StringToByteArray(string hex)
         {
             int NumberChars = hex.Length;
             byte[] bytes = new byte[NumberChars / 2];
