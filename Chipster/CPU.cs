@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chipster
 {
+    [Serializable]
     sealed class CPU
     {
         private IMemory memory;
