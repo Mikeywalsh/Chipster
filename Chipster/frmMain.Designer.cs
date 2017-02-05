@@ -31,11 +31,14 @@
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.loadStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debuggerSlowsSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerToggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.decompileROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +55,9 @@
             this.khzToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.khzToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this.khzToolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.x1000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.unlimitedVeryFastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtProgramCounter = new System.Windows.Forms.TextBox();
@@ -107,11 +112,6 @@
             this.txtIPS = new System.Windows.Forms.TextBox();
             this.lblIPS = new System.Windows.Forms.Label();
             this.btnUnstep = new System.Windows.Forms.Button();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
@@ -146,32 +146,42 @@
             // loadROMToolStripMenuItem
             // 
             this.loadROMToolStripMenuItem.Name = "loadROMToolStripMenuItem";
-            this.loadROMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadROMToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.loadROMToolStripMenuItem.Text = "Load ROM";
             this.loadROMToolStripMenuItem.Click += new System.EventHandler(this.loadROMToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(127, 6);
             // 
             // loadStateToolStripMenuItem
             // 
             this.loadStateToolStripMenuItem.Name = "loadStateToolStripMenuItem";
-            this.loadStateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadStateToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.loadStateToolStripMenuItem.Text = "Load State";
             // 
             // saveStateToolStripMenuItem
             // 
             this.saveStateToolStripMenuItem.Name = "saveStateToolStripMenuItem";
-            this.saveStateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveStateToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.saveStateToolStripMenuItem.Text = "Save State";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(127, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.debuggerSlowsSpeedToolStripMenuItem,
+            this.debuggerToggleToolStripMenuItem,
             this.toolStripSeparator5,
             this.decompileROMToolStripMenuItem,
             this.compileToROMToolStripMenuItem});
@@ -179,11 +189,17 @@
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // debuggerSlowsSpeedToolStripMenuItem
+            // debuggerToggleToolStripMenuItem
             // 
-            this.debuggerSlowsSpeedToolStripMenuItem.Name = "debuggerSlowsSpeedToolStripMenuItem";
-            this.debuggerSlowsSpeedToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.debuggerSlowsSpeedToolStripMenuItem.Text = "Debugger (Slows speed)";
+            this.debuggerToggleToolStripMenuItem.Name = "debuggerToggleToolStripMenuItem";
+            this.debuggerToggleToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.debuggerToggleToolStripMenuItem.Text = "Debugger (Slows speed)";
+            this.debuggerToggleToolStripMenuItem.Click += new System.EventHandler(this.debuggerToggleToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(198, 6);
             // 
             // decompileROMToolStripMenuItem
             // 
@@ -210,13 +226,13 @@
             // soundToolStripMenuItem
             // 
             this.soundToolStripMenuItem.Name = "soundToolStripMenuItem";
-            this.soundToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.soundToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.soundToolStripMenuItem.Text = "Sound";
             // 
             // colorsToolStripMenuItem
             // 
             this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
-            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.colorsToolStripMenuItem.Text = "Colors";
             // 
             // speedToolStripMenuItem
@@ -237,7 +253,7 @@
             this.toolStripSeparator2,
             this.unlimitedVeryFastToolStripMenuItem});
             this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            this.speedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.speedToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.speedToolStripMenuItem.Text = "Speed";
             // 
             // khzToolStripMenuItem
@@ -300,11 +316,21 @@
             this.khzToolStripMenuItem8.Size = new System.Drawing.Size(181, 22);
             this.khzToolStripMenuItem8.Text = "1 Khz";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
+            // 
             // x1000ToolStripMenuItem
             // 
             this.x1000ToolStripMenuItem.Name = "x1000ToolStripMenuItem";
             this.x1000ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.x1000ToolStripMenuItem.Text = "x1000";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
             // 
             // unlimitedVeryFastToolStripMenuItem
             // 
@@ -806,31 +832,6 @@
             this.btnUnstep.UseVisualStyleBackColor = true;
             this.btnUnstep.Click += new System.EventHandler(this.btnUnstep_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(198, 6);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -930,7 +931,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem debuggerSlowsSpeedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerToggleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decompileROMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem compileToROMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem speedToolStripMenuItem;

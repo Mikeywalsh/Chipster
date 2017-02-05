@@ -25,6 +25,7 @@ namespace Chipster
         Display myDisplay;
 
         TextBox[] registerDisplays = new TextBox[16];
+        bool showDebugger;
         bool showHex;
         bool romLoaded;
         bool stopped;
@@ -44,6 +45,7 @@ namespace Chipster
             screenPixelsPtr = Marshal.AllocHGlobal(myChip.GFX.Length);
             myDisplay = new Display(myChip, screenPixelsPtr, glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
             timer = new Stopwatch();
+            showDebugger = true;
             showHex = false;
             romLoaded = false;
             Compiler.Decompile("Zero Demo.ch8", "Zero Demo Code.txt");
@@ -71,7 +73,8 @@ namespace Chipster
         /// </summary>
         public void mainLoop()
         {
-            UpdateInfo();
+            if(showDebugger)
+                UpdateInfo();
 
             if (stopped)
                 return;
@@ -217,6 +220,21 @@ namespace Chipster
             {
                 stepMode = false;
                 stopped = false;
+            }
+        }
+
+        private void debuggerToggleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            debuggerToggleToolStripMenuItem.Checked = !debuggerToggleToolStripMenuItem.Checked;
+            showDebugger = debuggerToggleToolStripMenuItem.Checked;
+
+            if(showDebugger)
+            {
+                this.Size = new Size(833, 329);
+            }
+            else
+            {
+                this.Size = new Size(458, 329);
             }
         }
     }
