@@ -13,6 +13,9 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Chipster
 {
@@ -44,6 +47,23 @@ namespace Chipster
             showHex = false;
             romLoaded = false;
             Compiler.Decompile("Zero Demo.ch8", "Zero Demo Code.txt");
+
+            //Stream stream = File.Open("test.chst8", FileMode.Create);
+            //BinaryFormatter b = new BinaryFormatter();
+
+            //b.Serialize(stream, myChip);
+            //stream.Close();
+
+            //myChip = null;
+
+            ////Opens file "data.xml" and deserializes the object from it.
+            //stream = File.Open("test.chst8", FileMode.Open);
+            //b = new BinaryFormatter();
+
+            ////formatter = new BinaryFormatter();
+
+            //myChip = (CPU)b.Deserialize(stream);
+            //stream.Close();
         }
 
         /// <summary>
@@ -105,7 +125,7 @@ namespace Chipster
         bool IsApplicationIdle()
         {
             NativeMessage result;
-            return PeekMessage(out result, IntPtr.Zero, (uint)0, (uint)0, (uint)0) == 0;
+            return PeekMessage(out result, IntPtr.Zero, 0, 0, 0) == 0;
         }
 
         [StructLayout(LayoutKind.Sequential)]
