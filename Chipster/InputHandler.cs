@@ -1,35 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Input;
+using System.Windows.Forms;
 
 namespace Chipster
 {
     sealed class InputHandler : IInputHandler
     {
-        private Key[] keys;
+        private Dictionary<Keys, byte> keyCodes;
 
-        public InputHandler(Key[] k)
+        public InputHandler(Keys[] k)
         {
             if (k.Length != 16)
                 throw new ArgumentException("Need to specify 16 keys");
-            keys = k;
+
+            Dictionary<Keys, byte> kc = new Dictionary<Keys, byte>();
+
+            for(byte i = 0; i < 16; i++)
+            {
+                kc[k[i]] = i;
+            }
         }
 
-        public byte? GetPressedKeyValue()
+        public byte? GetKeyCode(Keys k)
         {
-            byte? pressedKeyValue = null;
-            KeyboardState state = new KeyboardState();
-            
-            for(byte i = 0; i < keys.Length; i++)
-            {
-                if (state.IsKeyDown(keys[i]))
-                    pressedKeyValue = i;
-            }
-
-            return pressedKeyValue;
+            if (!keyCodes.Keys.Contains(k))
+                return null;
+            else
+                return keyCodes[k];
         }
     }
 }

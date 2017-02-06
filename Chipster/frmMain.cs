@@ -79,7 +79,7 @@ namespace Chipster
             //If the stopped flag is set, halt further execution
             if (stopped)
                 return;
-
+            
             //Run a CPU cycle and update timer values
             myChip.EmulateCycle();
             instructionsThisSecond++;
@@ -102,15 +102,15 @@ namespace Chipster
         /// </summary>
         public void UpdateInfo()
         {
-            //txtProgramCounter.Text = showHex? HexHelper.UshortToHex(myChip.PC): myChip.PC.ToString();
-            //txtInstruction.Text = showHex? HexHelper.UshortToHex(myChip.Opcode): myChip.Opcode.ToString();
-            //txtAdress.Text = showHex? HexHelper.UshortToHex(myChip.Index): myChip.Index.ToString();
+            //txtProgramCounter.Text = showHex ? HexHelper.UshortToHex(myChip.PC) : myChip.PC.ToString();
+            //txtInstruction.Text = showHex ? HexHelper.UshortToHex(myChip.Opcode) : myChip.Opcode.ToString();
+            //txtAdress.Text = showHex ? HexHelper.UshortToHex(myChip.Index) : myChip.Index.ToString();
             //txtMessage.Text = myChip.UnknownOpcode ? "Unknown Opcode" : "None";
             //txtSound.Text = myChip.Beep ? "BEEP!" : "-";
 
-            //for(int i = 0; i < 16; i++)
+            //for (int i = 0; i < 16; i++)
             //{
-            //    registerDisplays[i].Text = showHex? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
+            //    registerDisplays[i].Text = showHex ? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
             //}
 
             if (clockTimer.ElapsedMilliseconds >= 1000)
@@ -170,6 +170,8 @@ namespace Chipster
 
             //Assign initial data to form elements
             glDisplay.Paint += new PaintEventHandler(glDisplay_Paint);
+            glDisplay.KeyDown += new KeyEventHandler(glDisplay_KeyDown);
+            glDisplay.KeyUp += new KeyEventHandler(glDisplay_KeyUp);
             registerDisplays = new TextBox[16] { txtR0, txtR1, txtR2, txtR3, txtR4, txtR5, txtR6, txtR7, txtR8, txtR9, txtRA, txtRB, txtRC, txtRD, txtRE, txtRF };
 
             //Set initial clockspeed to default
@@ -202,6 +204,18 @@ namespace Chipster
             framesThisSecond++;
         }
 
+        private void glDisplay_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.W)
+                Console.WriteLine("DOWN");
+        }
+
+        private void glDisplay_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.W)
+                Console.WriteLine("UP");
+        }
+
         /// <summary>
         /// Allow the user to check if they want debug results to be displayed to them in hex or base 10
         /// </summary>
@@ -220,7 +234,7 @@ namespace Chipster
         {
             //Initialise a dialogue which allows the user to select a .ch8 ROM file to load into the CPU
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Chip-8 ROM (.ch8)|*.ch8";
+            openFileDialog.Filter = "Chip-8 ROM |*.ch8";
             openFileDialog.FilterIndex = 1;
 
             //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
