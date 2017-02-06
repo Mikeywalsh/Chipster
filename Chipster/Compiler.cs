@@ -54,7 +54,7 @@ namespace Chipster
                                     break;
                                 default:
                                     unknownOpcode = true;
-                                    return;
+                                    break;
                             }
                             break;
                         //1NNN - Jump to address NNN
