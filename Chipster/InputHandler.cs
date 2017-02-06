@@ -7,7 +7,7 @@ using OpenTK.Input;
 
 namespace Chipster
 {
-    sealed class InputHandler
+    sealed class InputHandler : IInputHandler
     {
         private Key[] keys;
 
@@ -18,7 +18,7 @@ namespace Chipster
             keys = k;
         }
 
-        public byte? GetKey()
+        public byte? GetPressedKeyValue()
         {
             byte? pressedKeyValue = null;
             KeyboardState state = new KeyboardState();

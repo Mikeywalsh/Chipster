@@ -66,7 +66,9 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="HexHelper.cs" />
+    <Compile Include="IInputHandler.cs" />
     <Compile Include="IMemory.cs" />
+    <Compile Include="InputHandler.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="PictureBoxInterpolation.cs">
       <SubType>Component</SubType>
