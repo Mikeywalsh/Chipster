@@ -128,7 +128,7 @@
             this.helpToolStripMenuItem});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(817, 24);
+            this.mnuMain.Size = new System.Drawing.Size(442, 24);
             this.mnuMain.TabIndex = 1;
             this.mnuMain.Text = "menuStrip1";
             // 
@@ -229,13 +229,13 @@
             // soundToolStripMenuItem
             // 
             this.soundToolStripMenuItem.Name = "soundToolStripMenuItem";
-            this.soundToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.soundToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.soundToolStripMenuItem.Text = "Sound";
             // 
             // colorsToolStripMenuItem
             // 
             this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
-            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.colorsToolStripMenuItem.Text = "Colors";
             // 
             // speedToolStripMenuItem
@@ -256,7 +256,7 @@
             this.toolStripSeparator2,
             this.khzUnlimitedToolStripMenuItem});
             this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            this.speedToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.speedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.speedToolStripMenuItem.Text = "Speed";
             // 
             // khz1ToolStripMenuItem
@@ -879,7 +879,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(817, 290);
+            this.ClientSize = new System.Drawing.Size(442, 290);
             this.Controls.Add(this.btnUnstep);
             this.Controls.Add(this.txtIPS);
             this.Controls.Add(this.lblIPS);

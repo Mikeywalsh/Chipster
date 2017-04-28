@@ -182,7 +182,7 @@ namespace Chipster
             //Initialise CPU and Display variables
             myChip = new CPU(new Memory(4096));
             myDisplay = new Display(myChip, Marshal.AllocHGlobal(myChip.GFX.Length), glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
-            showDebugger = true;
+            showDebugger = false;
             showHex = false;
             romLoaded = false;
             initialised = true;
