@@ -14,20 +14,22 @@ namespace Chipster
             if (k.Length != 16)
                 throw new ArgumentException("Need to specify 16 keys");
 
-            Dictionary<Keys, byte> kc = new Dictionary<Keys, byte>();
+            keyCodes = new Dictionary<Keys, byte>();
 
-            for(byte i = 0; i < 16; i++)
+            for (byte i = 0; i < 16; i++)
             {
-                kc[k[i]] = i;
+                keyCodes[k[i]] = i;
             }
         }
 
-        public byte? GetKeyCode(Keys k)
+        public void GetKeyCode(Keys k, out byte? b)
         {
             if (!keyCodes.Keys.Contains(k))
-                return null;
+                b = null;
             else
-                return keyCodes[k];
+                b = keyCodes[k];
+
+            return;
         }
     }
 }

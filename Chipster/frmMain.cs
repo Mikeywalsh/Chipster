@@ -47,7 +47,7 @@ namespace Chipster
         public frmMain()
         {
             InitializeComponent();
-            Application.Idle += HandleApplicationIdle;     
+            Application.Idle += HandleApplicationIdle;
 
             //Stream stream = File.Open("test.chst8", FileMode.Create);
             //BinaryFormatter b = new BinaryFormatter();
@@ -79,7 +79,7 @@ namespace Chipster
             //If the stopped flag is set, halt further execution
             if (stopped)
                 return;
-            
+
             //Run a CPU cycle and update timer values
             myChip.EmulateCycle();
             instructionsThisSecond++;
@@ -90,10 +90,10 @@ namespace Chipster
                 glDisplay.Invalidate();
 
             //Set the currently pressed keys in the CPU instance
-            myChip.SetKeys();
+            myChip.ResetKeys();
 
             //Halt execution if the user has paused exectuion or an unknown opcode has been reached
-            if(stepMode || myChip.UnknownOpcode)
+            if (stepMode || myChip.UnknownOpcode)
                 stopped = true;
         }
 
@@ -102,16 +102,16 @@ namespace Chipster
         /// </summary>
         public void UpdateInfo()
         {
-            //txtProgramCounter.Text = showHex ? HexHelper.UshortToHex(myChip.PC) : myChip.PC.ToString();
-            //txtInstruction.Text = showHex ? HexHelper.UshortToHex(myChip.Opcode) : myChip.Opcode.ToString();
-            //txtAdress.Text = showHex ? HexHelper.UshortToHex(myChip.Index) : myChip.Index.ToString();
-            //txtMessage.Text = myChip.UnknownOpcode ? "Unknown Opcode" : "None";
-            //txtSound.Text = myChip.Beep ? "BEEP!" : "-";
+            txtProgramCounter.Text = showHex ? HexHelper.UshortToHex(myChip.PC) : myChip.PC.ToString();
+            txtInstruction.Text = showHex ? HexHelper.UshortToHex(myChip.Opcode) : myChip.Opcode.ToString();
+            txtAdress.Text = showHex ? HexHelper.UshortToHex(myChip.Index) : myChip.Index.ToString();
+            txtMessage.Text = myChip.UnknownOpcode ? "Unknown Opcode" : "None";
+            txtSound.Text = myChip.Beep ? "BEEP!" : "-";
 
-            //for (int i = 0; i < 16; i++)
-            //{
-            //    registerDisplays[i].Text = showHex ? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
-            //}
+            for (int i = 0; i < 16; i++)
+            {
+                registerDisplays[i].Text = showHex ? HexHelper.ByteToHex(myChip.Registers[i]).ToString() : myChip.Registers[i].ToString();
+            }
 
             if (clockTimer.ElapsedMilliseconds >= 1000)
             {
@@ -122,7 +122,7 @@ namespace Chipster
                 clockTimer.Restart();
             }
         }
-                
+
         #region True application Idle Logic
 
         private bool IsApplicationIdle()
@@ -241,14 +241,14 @@ namespace Chipster
             DialogResult result = openFileDialog.ShowDialog();
 
             //If the user selected a .ch8, reset the CPU to its default values and load the ROM into memory
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 myChip.Reset();
                 myChip.LoadROM(openFileDialog.FileName);
             }
 
             //Start the clockTimer that determines FPS and IPS and set the romLoaded flag to true
-            clockTimer.Start();     
+            clockTimer.Start();
             romLoaded = true;
         }
 
@@ -278,7 +278,7 @@ namespace Chipster
             debuggerToggleToolStripMenuItem.Checked = !debuggerToggleToolStripMenuItem.Checked;
             showDebugger = debuggerToggleToolStripMenuItem.Checked;
 
-            if(showDebugger)
+            if (showDebugger)
             {
                 this.Size = new Size(833, 329);
             }
@@ -327,7 +327,7 @@ namespace Chipster
         {
             ToolStripMenuItem t = (ToolStripMenuItem)sender;
 
-            if(t.Checked)
+            if (t.Checked)
             {
                 clockSpeed = 500;
                 lastSpeedChecked = khz5ToolStripMenuItem;

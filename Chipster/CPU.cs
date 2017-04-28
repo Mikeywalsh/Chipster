@@ -22,7 +22,7 @@ namespace Chipster
         public bool UnknownOpcode { get; private set; }
         private Stack<ushort> stack;
         private bool[] key;
-        public bool DrawFlag { get;  private set;}
+        public bool DrawFlag { get; private set; }
 
         private Random rand = new Random();
 
@@ -46,11 +46,11 @@ namespace Chipster
             PC = 512;
             Opcode = 0;
             Index = 0;
-            SetKeys();
+            ResetKeys();
 
             //Clear Display
             for (int i = 0; i < GFX.Length; i++)
-            { 
+            {
                 GFX[i] = 0;
             }
 
@@ -162,7 +162,7 @@ namespace Chipster
                     break;
                 //Series of Opcodes beginning with 8 that perform various register arithmatic
                 case 0x8000:
-                    switch(byte2 & 0x0F)
+                    switch (byte2 & 0x0F)
                     {
                         //8XY0 - Set RX to the value of RY
                         case 0x00:
@@ -287,7 +287,7 @@ namespace Chipster
                     for (int y = 0; y < height && yPos + y < 32; y++)
                     {
                         pixel = memory.Read(Index + y);
-                        for(int x = 0; x < 8 && xPos + x < 64; x++)
+                        for (int x = 0; x < 8 && xPos + x < 64; x++)
                         {
                             if ((pixel & (0x80 >> x)) != 0)
                             {
@@ -305,7 +305,7 @@ namespace Chipster
                     break;
                 //Opcodes to do with key presses
                 case 0xE000:
-                    switch(byte2)
+                    switch (byte2)
                     {
                         //EX9E - Skip next instruction if key at x is pressed
                         case 0x9E:
@@ -330,7 +330,7 @@ namespace Chipster
                     break;
                 ///Series of Opcodes beginning with F that perform various functions
                 case 0xF000:
-                    switch(byte2)
+                    switch (byte2)
                     {
                         //FX07 - Set RX to the value of the delay timer
                         case 0x07:
@@ -379,7 +379,7 @@ namespace Chipster
                             break;
                         //FX55 - Stores R0 to RX(inclusive) in memory starting at the address in Index
                         case 0x55:
-                            for(int i = 0; i < ((byte1 & 0x0F) + 1); i++)
+                            for (int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
                                 memory.Write(Registers[i], Index + i);
                             }
@@ -389,7 +389,7 @@ namespace Chipster
                         case 0x65:
                             for (int i = 0; i < ((byte1 & 0x0F) + 1); i++)
                             {
-                               Registers[i] = memory.Read(Index + i);
+                                Registers[i] = memory.Read(Index + i);
                             }
                             PC += 2;
                             break;
@@ -407,7 +407,7 @@ namespace Chipster
             if (DelayTimer > 0)
                 DelayTimer--;
 
-            if(SoundTimer > 0)
+            if (SoundTimer > 0)
             {
                 SoundTimer--;
                 Beep = true;
@@ -419,14 +419,24 @@ namespace Chipster
         }
 
         /// <summary>
-        /// Set the current key states
+        /// Set the current key states to their initial values
         /// </summary>
-        public void SetKeys()
+        public void ResetKeys()
         {
-            for(int i = 0; i < key.Length; i++)
+            for (int i = 0; i < key.Length; i++)
             {
                 key[i] = false;
             }
+        }
+
+        /// <summary>
+        /// Set the provided key to be either true or false
+        /// </summary>
+        /// <param name="index">Index of the key in the key array</param>
+        /// <param name="value">Value to set the key to</param>
+        public void SetKey(byte index, bool value)
+        {
+            key[index] = value;
         }
 
         //The base fontset, representing hex values from 0-F, which all CPU instances contain

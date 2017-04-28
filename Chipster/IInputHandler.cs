@@ -6,6 +6,6 @@ namespace Chipster
     /// </summary>
     interface IInputHandler
     {
-        byte? GetKeyCode(Keys k);
+        void GetKeyCode(Keys k, out byte? b);
     }
 }
