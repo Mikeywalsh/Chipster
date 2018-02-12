@@ -72,6 +72,8 @@ namespace Chipster
         /// </summary>
         private void mainLoop()
         {
+            Text = clockSpeed.ToString();
+            
             //Update the debug info, if it is enabled, still allow the user to swap between hex and decimal view even if stopped
             if (showDebugger)
                 UpdateInfo();
@@ -311,16 +313,20 @@ namespace Chipster
             if (t.Checked)
             {
                 clockSpeed /= mul;
+                lastMultiplierChecked = null;
             }
             else
             {
-                if (lastMultiplierChecked != null)
+                if (lastMultiplierChecked != null && lastMultiplierChecked != t)
+                {
+                    lastMultiplierChecked.Checked = false;
                     clockSpeed /= int.Parse(lastMultiplierChecked.Tag.ToString());
+                }
                 clockSpeed *= mul;
+                lastMultiplierChecked = t;
             }
 
             t.Checked = !t.Checked;
-            lastMultiplierChecked = t;
         }
 
         private void UnlimitedClockSpeed(object sender, EventArgs e)
