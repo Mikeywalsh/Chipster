@@ -1,20 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Chipster
 {
@@ -71,9 +59,7 @@ namespace Chipster
         /// Main loop for chip8 instance
         /// </summary>
         private void mainLoop()
-        {
-            Text = clockSpeed.ToString();
-            
+        {            
             //Update the debug info, if it is enabled, still allow the user to swap between hex and decimal view even if stopped
             if (showDebugger)
                 UpdateInfo();
