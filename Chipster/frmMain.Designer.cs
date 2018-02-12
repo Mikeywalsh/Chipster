@@ -37,7 +37,6 @@
             this.debuggerToggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.decompileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.speedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.khz1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,8 +156,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.debuggerToggleToolStripMenuItem,
             this.toolStripSeparator5,
-            this.decompileToolStripMenuItem,
-            this.compileToolStripMenuItem});
+            this.decompileToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -181,12 +179,6 @@
             this.decompileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.decompileToolStripMenuItem.Text = "Decompile .ch8 to .txt";
             this.decompileToolStripMenuItem.Click += new System.EventHandler(this.decompileToolStripMenuItem_Click);
-            // 
-            // compileToolStripMenuItem
-            // 
-            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.compileToolStripMenuItem.Text = "Compile .txt to .ch8";
             // 
             // settingsToolStripMenuItem
             // 
@@ -909,7 +901,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerToggleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decompileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem speedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem khz1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem khz2ToolStripMenuItem;
