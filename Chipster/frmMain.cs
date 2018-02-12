@@ -364,5 +364,10 @@ namespace Chipster
             }
         }
         #endregion
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

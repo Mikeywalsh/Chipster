@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Forms;
 
 namespace Chipster
@@ -12,7 +7,7 @@ namespace Chipster
     {
         public static void Compile(string codePath, string romPath)
         {
-            
+            //Not implemented
         }
 
         public static void Decompile(string romPath, string codePath)

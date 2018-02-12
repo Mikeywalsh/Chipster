@@ -72,14 +72,14 @@ namespace Chipster
 
             //Draw the 'screen' quad and apply the texture to it
             GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(0.0, 0.0);
-            GL.Vertex3(00, ScreenHeight, 0.0);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(0, ScreenHeight, 0);
             GL.TexCoord2(0, 1);
-            GL.Vertex3(00, 00, 0.0);
+            GL.Vertex3(0, 0, 0);
             GL.TexCoord2(1.0, 1.0);
-            GL.Vertex3(ScreenWidth, 00, 0.0);
+            GL.Vertex3(ScreenWidth, 0, 0);
             GL.TexCoord2(1, 0);
-            GL.Vertex3(ScreenWidth, ScreenHeight, 0.0);
+            GL.Vertex3(ScreenWidth, ScreenHeight, 0);
             GL.End();
         }
     }
