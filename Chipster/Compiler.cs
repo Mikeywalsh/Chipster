@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Chipster
@@ -7,7 +8,40 @@ namespace Chipster
     {
         public static void Compile(string codePath, string romPath)
         {
-            //Not implemented
+            using (StreamReader reader = new StreamReader(codePath))
+            using (FileStream writer = new FileStream(romPath, FileMode.Create))
+            {
+                string currentLine;
+                byte[] currentInstruction = new byte[2];
+
+                //Read throught the input code file one line at a time
+                while ((currentLine = reader.ReadLine()) != null)
+                {
+                    try
+                    {
+                        //Get the current instruction from the current line
+                        currentInstruction = HexHelper.StringToByteArray(currentLine.Substring(7, 4));
+
+                        //Write the current instruction to the ROM file
+                        writer.Write(currentInstruction, 0, 2);
+                    }
+                    catch(ArgumentOutOfRangeException)
+                    {
+                        //Alert the user that the input file is in an invalid format
+                        MessageBox.Show("Could not compile file! Invalid format...");
+
+                        //Dispose of the writer so that the incomplete ROM file can be deleted
+                        writer.Dispose();
+
+                        //Delete the incomplete ROM file and return
+                        File.Delete(romPath);
+                        return;
+                    }
+                }
+
+                //If this line has been reached, then the compilation was a success. Inform the user
+                MessageBox.Show("Compiled " + codePath + "\nStored results in " + romPath, "\nSuccessful Compilation");
+            }
         }
 
         public static void Decompile(string romPath, string codePath)
@@ -230,7 +264,7 @@ namespace Chipster
                     currentLine+= 2;
                 }
 
-                MessageBox.Show("Decompiled " + romPath + "\nStored results in " + codePath, "Successful Decompilation");
+                MessageBox.Show("Decompiled " + romPath + "\nStored results in " + codePath, "\nSuccessful Decompilation");
             }
         }
     }

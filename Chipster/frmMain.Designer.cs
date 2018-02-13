@@ -105,6 +105,7 @@
             this.txtIPS = new System.Windows.Forms.TextBox();
             this.lblIPS = new System.Windows.Forms.Label();
             this.btnUnstep = new System.Windows.Forms.Button();
+            this.compiletxtToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.grpGeneralPurpose.SuspendLayout();
             this.grpSpecialPurpose.SuspendLayout();
@@ -135,19 +136,19 @@
             // loadROMToolStripMenuItem
             // 
             this.loadROMToolStripMenuItem.Name = "loadROMToolStripMenuItem";
-            this.loadROMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadROMToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.loadROMToolStripMenuItem.Text = "Load ROM";
             this.loadROMToolStripMenuItem.Click += new System.EventHandler(this.loadROMToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(127, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -156,7 +157,8 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.debuggerToggleToolStripMenuItem,
             this.toolStripSeparator5,
-            this.decompileToolStripMenuItem});
+            this.decompileToolStripMenuItem,
+            this.compiletxtToROMToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -177,7 +179,7 @@
             // 
             this.decompileToolStripMenuItem.Name = "decompileToolStripMenuItem";
             this.decompileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.decompileToolStripMenuItem.Text = "Decompile .ch8 to .txt";
+            this.decompileToolStripMenuItem.Text = "Decompile ROM to .txt";
             this.decompileToolStripMenuItem.Click += new System.EventHandler(this.decompileToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
@@ -804,6 +806,13 @@
             this.btnUnstep.UseVisualStyleBackColor = true;
             this.btnUnstep.Click += new System.EventHandler(this.btnUnstep_Click);
             // 
+            // compiletxtToROMToolStripMenuItem
+            // 
+            this.compiletxtToROMToolStripMenuItem.Name = "compiletxtToROMToolStripMenuItem";
+            this.compiletxtToROMToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.compiletxtToROMToolStripMenuItem.Text = "Compile .txt to ROM";
+            this.compiletxtToROMToolStripMenuItem.Click += new System.EventHandler(this.compiletxtToROMToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -918,6 +927,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem x10ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compiletxtToROMToolStripMenuItem;
     }
 }
 

@@ -331,7 +331,7 @@ namespace Chipster
         #region Compile/Decompile Logic
         private void decompileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Initialise a dialogue which allows the user to select a .ch8 ROM file to decompile
+            //Initialise a dialogue which allows the user to select a  ROM file to decompile
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Chip-8 ROM |*.ch8;*.rom";
             openFileDialog.FilterIndex = 1;
@@ -343,7 +343,25 @@ namespace Chipster
             if (result == DialogResult.OK)
             {
                 Console.WriteLine(openFileDialog.FileName);
-                Compiler.Decompile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + " code.txt");
+                Compiler.Decompile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + ".txt");
+            }
+        }
+
+        private void compiletxtToROMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Initialise a dialogue which allows the user to select a txt  file to compile
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text File |*.txt";
+            openFileDialog.FilterIndex = 1;
+
+            //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
+            DialogResult result = openFileDialog.ShowDialog();
+
+            //If the user selected a txt file, attempt to compile it
+            if (result == DialogResult.OK)
+            {
+                Console.WriteLine(openFileDialog.FileName);
+                Compiler.Compile(openFileDialog.FileName, openFileDialog.FileName.Split('.')[0] + ".ch8");
             }
         }
         #endregion
