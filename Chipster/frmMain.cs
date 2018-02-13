@@ -10,7 +10,7 @@ namespace Chipster
     {
         //CPU and Display instances
         CPU myChip;
-        Display myDisplay;
+        IDisplay myDisplay;
 
         //Debugger variables
         TextBox[] registerDisplays = new TextBox[16];
@@ -36,23 +36,6 @@ namespace Chipster
         {
             InitializeComponent();
             Application.Idle += HandleApplicationIdle;
-
-            //Stream stream = File.Open("test.chst8", FileMode.Create);
-            //BinaryFormatter b = new BinaryFormatter();
-
-            //b.Serialize(stream, myChip);
-            //stream.Close();
-
-            //myChip = null;
-
-            ////Opens file "data.xml" and deserializes the object from it.
-            //stream = File.Open("test.chst8", FileMode.Open);
-            //b = new BinaryFormatter();
-
-            ////formatter = new BinaryFormatter();
-
-            //myChip = (CPU)b.Deserialize(stream);
-            //stream.Close();
         }
 
         /// <summary>
