@@ -205,7 +205,7 @@ namespace Chipster
         {
             //Initialise a dialogue which allows the user to select a .ch8 ROM file to load into the CPU
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Chip-8 ROM |*.ch8";
+            openFileDialog.Filter = "Chip-8 ROM |*.ch8;*.rom";
             openFileDialog.FilterIndex = 1;
 
             //Halt further execution until the user has selected a file, then store details about it in a DialogResult instance
