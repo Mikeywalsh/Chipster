@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace Chipster
 {
@@ -35,7 +36,7 @@ namespace Chipster
         public frmMain()
         {
             InitializeComponent();
-            Application.Idle += HandleApplicationIdle;
+            Application.Idle += HandleApplicationIdle;        
         }
 
         /// <summary>
@@ -157,6 +158,21 @@ namespace Chipster
             showHex = false;
             romLoaded = false;
             initialised = true;
+
+            try
+            {
+                //Load the intro screen ROM
+                myChip.Reset();
+                myChip.LoadROM("../../../ROMs/IntroScreen.ch8");
+
+                //Start the clockTimer that determines FPS and IPS and set the romLoaded flag to true
+                clockTimer.Start();
+                romLoaded = true;
+            }
+            catch(DirectoryNotFoundException)
+            {
+                Console.WriteLine("Intro screen ROM is not present...");
+            }
         }
 
         /// <summary>
