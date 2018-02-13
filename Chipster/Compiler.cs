@@ -210,10 +210,12 @@ namespace Chipster
                     }
 
                     if (unknownOpcode)
-                        break;
+                    {
+                        writer.WriteLine(currentLineText += "Unknown opcode, possible sprite data");
+                    }
 
                     writer.WriteLine(currentLineText);
-                    currentLine++;
+                    currentLine+= 2;
                 }
 
                 MessageBox.Show("Decompiled " + romPath + "\nStored results in " + codePath, "Successful Decompilation");
