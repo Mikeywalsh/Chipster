@@ -152,7 +152,7 @@ namespace Chipster
             clockTimer = new Stopwatch();
 
             //Initialise CPU and Display variables
-            myChip = new CPU(new Memory(4096));
+            myChip = new CPU(new Memory(4096), new InputHandler());
             myDisplay = new Display(myChip, Marshal.AllocHGlobal(myChip.GFX.Length), glDisplay.ClientSize.Width, glDisplay.ClientSize.Height, 64, 32);
             showDebugger = false;
             showHex = false;

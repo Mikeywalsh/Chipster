@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chipster
 {
@@ -11,6 +8,7 @@ namespace Chipster
     sealed class CPU
     {
         private IMemory memory;
+        private IInputHandler inputHandler;
         public byte[] Registers { get; private set; }
         public ushort Index { get; private set; }
         public ushort PC { get; private set; }
@@ -30,8 +28,10 @@ namespace Chipster
         /// Initialise the chip8 system
         /// </summary>
         /// <param name="mem">The starting memory</param>
-        public CPU(IMemory mem)
+        /// <param name="input>"The input handler for this CPU instance</param>
+        public CPU(IMemory mem, IInputHandler input)
         {
+            inputHandler = input;
             memory = mem;
             GFX = new byte[64 * 32];
             key = new bool[16];
@@ -87,6 +87,9 @@ namespace Chipster
         public void EmulateCycle()
         {
             DrawFlag = false;
+
+            //Refresh user input
+            inputHandler.RefreshInput(key);
 
             //Fetch Opcode
             byte byte1 = memory.Read(PC);

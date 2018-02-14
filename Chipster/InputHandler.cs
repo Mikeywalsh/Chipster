@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+using OpenTK.Input;
 
 namespace Chipster
 {
     sealed class InputHandler : IInputHandler
     {
-        private Dictionary<Keys, byte> keyCodes;
+        /// <summary>
+        /// An array of mappings between keys and their corresponding index on the hexidecimal input
+        /// </summary>
+        private static Key[] InputKeys = new Key[] { Key.KeypadPeriod, Key.Keypad7, Key.Keypad8, Key.Keypad9, Key.Keypad4, Key.Keypad5, Key.Keypad6, Key.Keypad1, Key.Keypad2, Key.Keypad3, Key.Keypad0, Key.KeypadEnter, Key.KeypadMinus, Key.KeypadAdd, Key.KeypadDivide, Key.KeypadMultiply };
 
-        public InputHandler(Keys[] k)
+        /// <summary>
+        /// Refresh each flag in the input keys array
+        /// </summary>
+        /// <param name="keys">An array of 16 length, each element is set to true if its corresponding key is pressed down, false if not</param>
+        public void RefreshInput(bool[] keys)
         {
-            if (k.Length != 16)
+            //Check that the input keys array is of 16 length
+            if (keys.Length != 16)
                 throw new ArgumentException("Need to specify 16 keys");
 
-            keyCodes = new Dictionary<Keys, byte>();
+            //Get the current state of the keyboard
+            KeyboardState currentState = Keyboard.GetState();
 
-            for (byte i = 0; i < 16; i++)
+            //Assign a true or false value to each element of the keys array
+            for (int i = 0; i < 16; i++)
             {
-                keyCodes[k[i]] = i;
+                keys[i] = currentState[InputKeys[i]];
             }
-        }
-
-        public void GetKeyCode(Keys k, out byte? b)
-        {
-            if (!keyCodes.Keys.Contains(k))
-                b = null;
-            else
-                b = keyCodes[k];
-
-            return;
         }
     }
 }

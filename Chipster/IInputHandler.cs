@@ -1,11 +1,9 @@
-﻿using System.Windows.Forms;
-
-namespace Chipster
+﻿namespace Chipster
 {   /// <summary>
     /// Interface used for classes wishing to implement input
     /// </summary>
     interface IInputHandler
     {
-        void GetKeyCode(Keys k, out byte? b);
+        void RefreshInput(bool[] keys);
     }
 }
