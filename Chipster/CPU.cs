@@ -22,6 +22,8 @@ namespace Chipster
         private bool[] key;
         public bool DrawFlag { get; private set; }
 
+        private bool awaitingInput;
+        private byte awaitingResultRegister;
         private Random rand = new Random();
 
         /// <summary>
@@ -90,6 +92,28 @@ namespace Chipster
 
             //Refresh user input
             inputHandler.RefreshInput(key);
+
+            //If blocking to await user input, check to see if a key is pressed
+            if(awaitingInput)
+            {
+                for(byte i = 0; i < 16; i++)
+                {
+                    if(key[i])
+                    {
+                        //Store the input key in the result register, stop blocking and move to the next instruction
+                        Registers[awaitingResultRegister] = i;
+                        awaitingInput = false;
+                        PC += 2;
+                        break;
+                    }
+                }
+
+                if(awaitingInput)
+                {
+                    //If a key has not been pressed then continue blocking
+                    return;
+                }
+            }
 
             //Fetch Opcode
             byte byte1 = memory.Read(PC);
@@ -342,9 +366,9 @@ namespace Chipster
                             break;
                         //FX0A - Await key press then store result in RX
                         case 0x0A:
-                            //Temp, just set RX to first key value immediately
-                            Registers[byte1 & 0x0F] = 0;
-                            PC += 2;
+                            //Start blocking until any user input is recorded
+                            awaitingInput = true;
+                            awaitingResultRegister = (byte)(byte1 & 0x0F);
                             break;
                         //FX15 - Set the value of the delay timer to be equal to RX
                         case 0x15:
